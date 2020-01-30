@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:h="http://java.sun.com/jsf/html">
+    <p:menubar id="header_menu">
+        <p:menuitem url="#{facesContext.externalContext.requestContextPath}/questionnaire.xhtml" value="#{msg.pageNameQuestionnaire}"/>
+        <c:if test="#{userBean.user != null}">
+            <p:submenu rendered="#{!userBean.user.active}" label="#{msg.headerMenuActivationMessage}" styleClass="submenu-label-red">
+                <p:menuitem value="#{msg.headerMenuActivationSendNewEmail}" action="#{userBean.sendNewActivationEmail}" update="messages"/>
+            </p:submenu>
+
+            <p:menuitem url="#{facesContext.externalContext.requestContextPath}/Server/Sec/Management/field_manage.xhtml"
+                        value="#{msg.pageNameFieldManagement}"/>
+            <p:menuitem url="#{facesContext.externalContext.requestContextPath}/Server/Sec/Management/response_manage.xhtml"
+                        value="#{msg.pageNameResponseManagement}"/>
+            <p:submenu label="#{userBean.user.firstName} #{userBean.user.lastName}">
+                <p:menuitem value="#{msg.pageNameAccountEdit}" url="#{facesContext.externalContext.requestContextPath}/Server/Sec/User/account_edit.xhtml"/>
+                <p:menuitem value="#{msg.pageNameChangePassword}" url="#{facesContext.externalContext.requestContextPath}/Server/Sec/User/change_password.xhtml"/>
+                <p:menuitem value="#{msg.headerMenuLogOut}" ajax="false" action="#{userBean.logout}"/>
+            </p:submenu>
+        </c:if>
+
+        <p:menuitem rendered="#{userBean.user == null}"
+                    url="#{facesContext.externalContext.requestContextPath}/Server/User/authorization.xhtml"
+                    value="#{msg.pageNameAuthorization}"/>
+
+        <p:submenu label="#{msg.headerMenuLanguage}">
+            <p:menuitem value="#{msg.headerMenuEnglish}" rendered="#{!userBean.equalWithCurrentLocale(enums.typeOfLocaleEN)}"
+                        action="#{userBean.changeLocale(enums.typeOfLocaleEN)}" update="header_menu, form"/>
+            <p:menuitem value="#{msg.headerMenuRussian}" rendered="#{!userBean.equalWithCurrentLocale(enums.typeOfLocaleRU)}"
+                        action="#{userBean.changeLocale(enums.typeOfLocaleRU)}" update="header_menu, form"/>
+        </p:submenu>
+    </p:menubar>
+
+</ui:composition>
+

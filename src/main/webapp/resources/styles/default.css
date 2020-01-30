@@ -1,0 +1,107 @@
+.ui-g.form-group > div {
+    padding: 8px;
+}
+
+.btn_line {
+    margin-top: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.red {
+    color: red;
+}
+
+.submenu-label-red span{
+    color: red;
+}
+
+.word-wrap {
+    word-wrap: break-word;
+}
+
+.fileupload-simple > .ui-widget-header {
+    border: none;
+    background: none;
+}
+
+.fileupload-simple > .ui-widget-content {
+    border: none;
+    background: none;
+}
+
+.fileupload-simple .ui-fileupload-files {
+    margin: 0;
+}
+
+.fifty-percent-width {
+    width: 50%;
+}
+
+.column-panel{
+    flex-direction: column;
+    display: flex
+}
+
+.without-header thead {
+    display: none;
+}
+
+.eighty-five-percent-height {
+    height: 85%;
+}
+
+.top-alignment {
+    vertical-align: top;
+}
+
+.ui-panelgrid.form-group .ui-panelgrid-cell {
+    padding: 8px;
+}
+
+.ui-panelgrid.ui-panelgrid-blank .ui-grid-responsive .ui-grid-row {
+    border: 0 none;
+}
+
+.float-left{
+    float: left;
+}
+
+.float-right{
+    float: right;
+}
+
+.panel-center-of-page{
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+}
+
+.auto-width{
+    width: -webkit-fill-available;
+}
+
+.header1{
+    display: block;
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+
+.header3{
+    text-align: center;
+    display: block;
+    font-size: 1.17em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view locale="#{userBean.userLocale}" encoding="utf-8"/>
+<h:head>
+    <title>#{msg.mainApplicationPageTitle}</title>
+    <link href="#{facesContext.externalContext.requestContextPath}/resources/styles/default.css"
+          media="all" rel="stylesheet" type="text/css"/>
+</h:head>
+<h:body>
+    <h:form id="headerForm">
+        <ui:include src="../components/header.xhtml"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </h:form>
+
+    <p:growl id="messages" showDetail="true" autoUpdate="false"
+             globalOnly="true"/>
+
+    <ui:insert name="socket"/>
+
+    <h:form id="form" enctype="multipart/form-data" prependId="false">
+        <ui:insert name="body"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </h:form>
+
+    <h:form id="dialogForm" enctype="multipart/form-data" prependId="false">
+        <ui:insert name="dialog"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </h:form>
+
+    <ui:insert name="script"/>
+</h:body>
+</html>

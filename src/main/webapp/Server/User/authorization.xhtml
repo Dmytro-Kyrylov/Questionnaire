@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/resources/templates/main_template.xhtml">
+    <ui:define name="body">
+
+        <p:outputPanel id="auth_section">
+
+            <p:outputPanel styleClass="panel-center-of-page" id="logInSection"
+                           rendered="#{authorizationBean.showLogInSection}">
+                <p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group" layout="grid">
+                    <h:outputText styleClass="header3" value="#{msg.authorizationLogInSectionHeader}"/>
+
+                    <p:inputText placeholder="#{msg.authorizationLogInSectionEmail}" id="j_username" required="true"
+                                 value="#{authorizationBean.email}" styleClass="auto-width" maxlength="255">
+                        <f:validateRegex pattern="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"/>
+                    </p:inputText>
+                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+
+                    <p:password placeholder="#{msg.authorizationLogInSectionPassword}" id="j_password" maxlength="20"
+                                value="#{authorizationBean.password}" required="true" styleClass="auto-width">
+                        <f:validateLength minimum="6"/>
+                    </p:password>
+                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+
+                    <p:selectBooleanCheckbox id="remember-me" itemLabel="#{msg.authorizationRememberMeCheckBox}"/>
+
+                    <p:commandButton action="#{authorizationBean.logIn}" value="#{msg.authorizationLogInButton}"
+                                     styleClass="auto-width" process="logInSection" ajax="false"
+                                     update="messages, headerForm:header_menu"/>
+                    <p:outputPanel>
+                        <p:outputLabel value="#{msg.authorizationMessageForSignUpSection}"/>
+                        <p:commandButton value="#{msg.authorizationSignUpSectionHeader}" process="@this"
+                                         action="#{authorizationBean.switchLogInAndSignUpSectionsToShow}"
+                                         update="auth_section"/>
+                    </p:outputPanel>
+                </p:panelGrid>
+            </p:outputPanel>
+
+            <p:outputPanel style="display: flex" styleClass="panel-center-of-page" id="signUpSection"
+                           rendered="#{not authorizationBean.showLogInSection}">
+                <p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group">
+                    <h:outputText styleClass="header3" value="#{msg.authorizationSignUpSectionHeader}"/>
+
+                    <p:outputPanel>
+                        <h:outputText value="*" styleClass="red"/>
+                        <p:inputText styleClass="auto-width" placeholder="#{msg.authorizationSignUpSectionEmail}"
+                                     value="#{authorizationBean.email}" required="true"
+                                     maxlength="255">
+                            <f:validateRegex pattern="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"/>
+                        </p:inputText>
+                        <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    </p:outputPanel>
+
+                    <p:outputPanel>
+                        <h:outputText value="*" styleClass="red"/>
+                        <p:password placeholder="#{msg.authorizationSignUpSectionNewPassword}" styleClass="auto-width"
+                                    maxlength="20" feedback="true" value="#{authorizationBean.password}" weakLabel="fignya" goodLabel="neploho" strongLabel="krasava"
+                                    match="confirmPass" required="true">
+                            <f:validateLength minimum="6"/>
+                        </p:password>
+                        <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    </p:outputPanel>
+
+                    <p:outputPanel>
+                        <h:outputText value="*" styleClass="red"/>
+                        <p:password id="confirmPass" placeholder="#{msg.authorizationSignUpSectionNewPasswordConfirmation}"
+                                    styleClass="auto-width" required="true" maxlength="20">
+                            <f:validateLength minimum="6"/>
+                        </p:password>
+                        <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    </p:outputPanel>
+
+                    <p:outputPanel>
+                        <h:outputText value="*" styleClass="red"/>
+                        <p:inputText placeholder="#{msg.authorizationSignUpSectionFirstName}" styleClass="auto-width"
+                                     value="#{authorizationBean.firstName}" required="true" maxlength="255"/>
+                        <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    </p:outputPanel>
+
+                    <p:outputPanel>
+                        <h:outputText value="*" styleClass="red"/>
+                        <p:inputText placeholder="#{msg.authorizationSignUpSectionLastName}" styleClass="auto-width"
+                                     value="#{authorizationBean.lastName}" required="true" maxlength="255"/>
+                        <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    </p:outputPanel>
+
+                    <p:inputText placeholder="#{msg.authorizationSignUpSectionPhone}" styleClass="auto-width"
+                                 value="#{authorizationBean.phone}" maxlength="20"/>
+                    <p:commandButton action="#{authorizationBean.singUp}" styleClass="auto-width"
+                                     value="#{msg.authorizationSignUpButton}" process="signUpSection"
+                                     update="messages, headerForm:header_menu, auth_section"/>
+                    <p:outputPanel>
+                        <p:outputLabel value="#{msg.authorizationMessageForLogInSection}"/>
+                        <p:commandButton value="#{msg.authorizationLogInSectionHeader}" process="@this"
+                                         action="#{authorizationBean.switchLogInAndSignUpSectionsToShow}"
+                                         update="auth_section"/>
+                    </p:outputPanel>
+                </p:panelGrid>
+            </p:outputPanel>
+
+        </p:outputPanel>
+
+    </ui:define>
+
+</ui:composition>
+</html>

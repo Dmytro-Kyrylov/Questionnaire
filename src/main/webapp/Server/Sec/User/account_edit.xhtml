@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/resources/templates/main_template.xhtml">
+    <ui:define name="body">
+        <p:outputPanel styleClass="panel-center-of-page">
+            <p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group"
+                         id="commonDataChangeSection">
+                <h:outputText styleClass="header3" value="#{msg.accountEditUserDataSectionHeader}"/>
+                <p:panelGrid columns="3" styleClass="ui-panelgrid-blank form-group">
+                    <h:outputText value="#{msg.accountEditUserFirstName}:"/>
+                    <p:inputText value="#{accountEditBean.pageUser.firstName}" required="true" maxlength="255"/>
+                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+
+                    <h:outputText value="#{msg.accountEditUserLastName}:"/>
+                    <p:inputText value="#{accountEditBean.pageUser.lastName}" required="true" maxlength="255"/>
+                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+
+                    <h:outputText value="#{msg.accountEditUserEmail}:"/>
+                    <p:inputText value="#{accountEditBean.pageUser.email}" required="true" maxlength="255">
+                        <f:validateRegex pattern="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"/>
+                    </p:inputText>
+                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+
+                    <h:outputText value="#{msg.accountEditUserPhone}:"/>
+                    <p:inputText value="#{accountEditBean.pageUser.phone}" maxlength="20"/>
+                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+
+                </p:panelGrid>
+                <p:commandButton action="#{accountEditBean.editAccount}" value="#{msg.save}"
+                                 styleClass="auto-width" update="messages, headerForm:header_menu"/>
+            </p:panelGrid>
+
+        </p:outputPanel>
+    </ui:define>
+</ui:composition>
+</html>

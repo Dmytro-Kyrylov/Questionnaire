@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration debug="false">
+
+    <appender name="ApplicationAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="${catalina.home}/logs/application-full.log"/>
+        <param name="MaxFileSize" value="5MB"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="Encoding" value="UTF-8"/>
+        <layout class="org.apache.log4j.EnhancedPatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601} [%-5p][%-16.16t][%30c{-4}] - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="WARN"/>
+            <param name="LevelMax" value="FATAL"/>
+        </filter>
+    </appender>
+
+    <appender name="InfoApplicationAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="${catalina.home}/logs/application-info.log"/>
+        <param name="MaxFileSize" value="5MB"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="Encoding" value="UTF-8"/>
+        <layout class="org.apache.log4j.EnhancedPatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601} [%-5p][%-16.16t][%30c{-4}] - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO"/>
+            <param name="LevelMax" value="INFO"/>
+        </filter>
+    </appender>
+
+    <appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+        <param name="Encoding" value="Cp866"/>
+        <layout class="org.apache.log4j.EnhancedPatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601} [%-5p][%t][%c{-4}] - %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="Hibernate" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="${catalina.home}/logs/hibernate.log"/>
+        <param name="MaxFileSize" value="5MB"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="Encoding" value="UTF-8"/>
+        <layout class="org.apache.log4j.EnhancedPatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601} [%-5p][%-16.16t][%30c{-2}] - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO"/>
+            <param name="LevelMax" value="FATAL"/>
+        </filter>
+    </appender>
+
+    <logger name="org.hibernate.SQL" additivity="true">
+        <level value="TRACE"/>
+        <appender-ref ref="Hibernate"/>
+    </logger>
+
+    <logger name="org.hibernate.type" additivity="true">
+        <level value="TRACE"/>
+        <appender-ref ref="Hibernate"/>
+    </logger>
+
+    <logger name="org.hibernate" additivity="true">
+        <level value="INFO"/>
+        <appender-ref ref="Hibernate"/>
+    </logger>
+
+    <logger name="com.kyrylov.questionnaire" additivity="true">
+        <level value="INFO"/>
+        <appender-ref ref="ApplicationAppender"/>
+        <appender-ref ref="InfoApplicationAppender"/>
+    </logger>
+
+    <root>
+        <priority value="INFO"/>
+        <appender-ref ref="ConsoleAppender"/>
+    </root>
+
+</log4j:configuration>

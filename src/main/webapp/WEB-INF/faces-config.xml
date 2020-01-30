@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd"
+              version="2.3">
+    <application>
+
+        <locale-config>
+            <default-locale>en</default-locale>
+            <supported-locale>ru</supported-locale>
+        </locale-config>
+
+        <message-bundle>locale/page_messages</message-bundle>
+        <message-bundle>enums</message-bundle>
+
+        <resource-bundle>
+            <base-name>locale/page_messages</base-name>
+            <var>msg</var>
+        </resource-bundle>
+
+        <resource-bundle>
+            <base-name>enums</base-name>
+            <var>enums</var>
+        </resource-bundle>
+
+    </application>
+</faces-config>

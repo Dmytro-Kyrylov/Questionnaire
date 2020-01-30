@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/resources/templates/main_template.xhtml">
+    <ui:define name="socket">
+        <f:websocket channel="response_table" scope="application">
+            <p:ajax event="updateResponseTable" listener="#{responseManageBean.updateResponseTable}"
+                    update="responseTable"/>
+        </f:websocket>
+    </ui:define>
+
+    <ui:define name="body">
+        <h:outputText value="#{msg.responseManageMainHeader}" styleClass="header3"/>
+
+        <p:dataTable id="responseTable" var="response" value="#{responseManageBean.lazyModel}" rows="10"
+                     paginator="true" paginatorPosition="bottom" rowsPerPageTemplate="10, 20, 100"
+                     styleClass="word-wrap" lazy="true"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords}">
+
+            <p:column headerText="#{msg.responseManageColumnHeaderUser}" filterBy="#{response.user.email}">
+                <h:outputText value="#{response.user.email}"/>
+            </p:column>
+
+            <p:column headerText="#{msg.responseManageColumnHeaderDateOfCreate}" sortBy="#{response.date}">
+                <h:outputText value="#{response.date.toString()}"/>
+            </p:column>
+
+            <p:columns value="#{responseManageBean.fields}" var="field" headerText="#{field.label}">
+                <h:outputText rendered="#{not responseManageBean.isItFileFieldAndFileExist(response,field)}"
+                              value="#{responseManageBean.getResponseValueForField(response,field)}"/>
+                <p:commandButton rendered="#{responseManageBean.isItFileFieldAndFileExist(response,field)}" ajax="false"
+                                 value="#{responseManageBean.getResponseValueForField(response,field)}"
+                                 styleClass="auto-width">
+                    <p:fileDownload value="#{responseManageBean.downloadDocument(response,field)}"/>
+                </p:commandButton>
+            </p:columns>
+
+            <p:column style="width: 50px;">
+                <p:commandButton value="X" action="#{responseManageBean.deleteResponse(response)}"
+                                 update="responseTable, messages">
+                    <p:confirm header="#{msg.confirmationDialogHeader}"
+                               message="#{msg.confirmationDialogQuestion}"/>
+                </p:commandButton>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="#{msg.confirmationDialogYesButton}" styleClass="ui-confirmdialog-yes"
+                                     update="responseTable"/>
+                    <p:commandButton value="#{msg.confirmationDialogNoButton}" styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            </p:column>
+        </p:dataTable>
+
+        <p:commandButton ajax="false" value="#{msg.responseManageDownloadXLS}" styleClass="float-right">
+            <p:fileDownload value="#{responseManageBean.downloadXlsRepresentationOfTable()}"/>
+        </p:commandButton>
+        <p:commandButton ajax="false" value="#{msg.responseManageDownloadXML}" styleClass="float-right">
+            <p:fileDownload value="#{responseManageBean.downloadXmlRepresentationOfTable()}"/>
+        </p:commandButton>
+    </ui:define>
+</ui:composition>
+</html>

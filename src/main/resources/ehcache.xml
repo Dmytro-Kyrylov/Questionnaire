@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+    <diskStore path="/cache"/>
+
+    <defaultCache
+            maxEntriesLocalHeap="100"
+            eternal="false"
+            statistics="true"
+            timeToIdleSeconds="10"
+            timeToLiveSeconds="120"
+            maxEntriesLocalDisk="1000"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU">
+        <persistence strategy="localTempSwap"/>
+    </defaultCache>
+</ehcache>

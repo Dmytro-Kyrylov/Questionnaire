@@ -7,11 +7,6 @@
     <session-factory name="questionnaire">
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL10Dialect</property>
 
-      <!--  <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/questionnaire</property>
-        <property name="hibernate.connection.email">postgres</property>
-        <property name="hibernate.connection.password">root</property>-->
-
         <!-- Connection pool-->
         <property name="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
         <property name="hibernate.connection.provider_disables_autocommit">true</property>

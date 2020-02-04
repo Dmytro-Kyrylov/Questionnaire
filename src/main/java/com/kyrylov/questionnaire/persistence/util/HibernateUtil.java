@@ -54,4 +54,8 @@ class HibernateUtil {
         return sessionFactory;
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        sessionFactory.close();
+    }
 }

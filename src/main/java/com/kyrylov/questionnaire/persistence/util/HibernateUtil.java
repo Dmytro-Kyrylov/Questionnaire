@@ -1,5 +1,6 @@
 package com.kyrylov.questionnaire.persistence.util;
 
+import com.kyrylov.questionnaire.util.helpers.ResourceHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -8,6 +9,7 @@ import org.hibernate.service.ServiceRegistry;
 import org.reflections.Reflections;
 
 import javax.persistence.Entity;
+import java.io.IOException;
 import java.util.Set;
 
 /**
@@ -16,12 +18,15 @@ import java.util.Set;
  * @author Dmitrii
  */
 @Slf4j
-class HibernateUtil {
+public class HibernateUtil {
 
     private static SessionFactory sessionFactory;
 
+    private static SessionManager sessionManager;
+
     static {
         getSessionFactoryInstance();
+        getSessionManager();
     }
 
     private static SessionFactory buildSessionFactory() {
@@ -52,6 +57,25 @@ class HibernateUtil {
             sessionFactory = buildSessionFactory();
         }
         return sessionFactory;
+    }
+
+    /**
+     * Find correct class path in project.properties file, create its instance and return it
+     *
+     * @return implementation of SessionManager interface{@link SessionManager}
+     */
+    public static SessionManager getSessionManager() {
+        if (sessionManager == null) {
+            try {
+                Class sessionManagerImplClass = Class.forName(
+                        ResourceHelper.getProperties(ResourceHelper.ResourceProperties.PROJECT_PROPERTIES)
+                                .getProperty(ResourceHelper.ResourceProperties.ProjectProperties.SESSION_MANAGER_CLASS));
+                sessionManager = (SessionManager) sessionManagerImplClass.newInstance();
+            } catch (ClassNotFoundException | IOException | InstantiationException | IllegalAccessException e) {
+                log.error("Error when trying to get SessionManager implementation", e);
+            }
+        }
+        return sessionManager;
     }
 
     @Override

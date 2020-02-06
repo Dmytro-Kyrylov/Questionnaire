@@ -7,6 +7,8 @@ import org.hibernate.Session;
 @Slf4j
 public class SessionHolder {
 
+    public static final String HIBERNATE_SESSION_ATTRIBUTE = "hibernateSessionAttribute";
+
     private Session session;
 
     public Session getSession() {

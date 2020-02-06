@@ -5,8 +5,10 @@ import com.kyrylov.questionnaire.persistence.domain.entities.User;
 import com.kyrylov.questionnaire.persistence.domain.entities.UserRole;
 import com.kyrylov.questionnaire.persistence.domain.entities.User_;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
+import com.kyrylov.questionnaire.util.dto.UserDto;
 import com.kyrylov.questionnaire.util.helpers.ResourceHelper;
 import com.kyrylov.questionnaire.web.beans.BasePageBean;
+import com.kyrylov.questionnaire.web.security.SecurityHelper;
 import com.kyrylov.questionnaire.web.util.helpers.EmailHelper;
 import com.kyrylov.questionnaire.web.util.helpers.UserActivationHelper;
 import lombok.Getter;
@@ -28,22 +30,11 @@ public class AccountEditBean extends BasePageBean {
 
     private static final long serialVersionUID = -791468635376297771L;
 
-    private User pageUser;
+    private UserDto pageUser;
 
     @PostConstruct
     private void init() {
-        setPageUser(new User());
-        initUser(getPageUser(), getUserBean().getUser());
-    }
-
-    private void initUser(User targetUser, User sourceUser) {
-        targetUser.setEmail(sourceUser.getEmail());
-        targetUser.setFirstName(sourceUser.getFirstName());
-        targetUser.setLastName(sourceUser.getLastName());
-        targetUser.setPhone(sourceUser.getPhone());
-        targetUser.setRoles(sourceUser.getRoles());
-        targetUser.setActive(sourceUser.getActive());
-        targetUser.setActivationKey(sourceUser.getActivationKey());
+        setPageUser(getUserBean().getUser().clone());
     }
 
     /**
@@ -63,52 +54,62 @@ public class AccountEditBean extends BasePageBean {
             }
         }
 
-        User userToSave = getUserBean().getUser();
-
-        User oldUserdata = new User();
-        initUser(oldUserdata, getUserBean().getUser());
-
         try {
+            User user = DaoManager.select(User.class).where()
+                    .equal(User_.EMAIL, getUserBean().getUser().getEmail()).execute().get(0);
             DaoManager.beginTransaction();
 
-            if (!getPageUser().getEmail().equals(userToSave.getEmail())) {
-                userToSave.setActivationKey(UserActivationHelper.generateActivationKey(userToSave));
-                userToSave.setActive(false);
-                userToSave.getRoles().removeIf(r -> r.getRole().equals(UserRole.RoleEnum.ROLE_ADMIN));
+            if (!getPageUser().getEmail().equals(user.getEmail())) {
+                user.setActivationKey(UserActivationHelper.generateActivationKey(user.getEmail()));
+                user.setActive(false);
+                user.getRoles().removeIf(r -> r.getRole().equals(UserRole.RoleEnum.ROLE_ADMIN));
             }
 
-            userToSave.setPhone(getPageUser().getPhone());
-            userToSave.setEmail(getPageUser().getEmail());
-            userToSave.setFirstName(getPageUser().getFirstName());
-            userToSave.setLastName(getPageUser().getLastName());
+            user.setPhone(getPageUser().getPhone());
+            user.setEmail(getPageUser().getEmail());
+            user.setFirstName(getPageUser().getFirstName());
+            user.setLastName(getPageUser().getLastName());
 
-            DaoManager.save(getUserBean().getUser());
+            DaoManager.save(user);
 
-            if (!oldUserdata.getEmail().equals(userToSave.getEmail())) {
-                sendEmailToUsers(userToSave, oldUserdata.getEmail());
+            if (!getUserBean().getUser().getEmail().equals(user.getEmail())) {
+                sendEmailToUsers(user, getUserBean().getUser().getEmail());
             }
 
             DaoManager.commitTransaction();
+
+            if (!getUserBean().getUser().getEmail().equals(user.getEmail())) {
+                getUserBean().setUser(SecurityHelper.updateUserDetailsAndGetDtoOfUser(user));
+            } else {
+                getUserBean().setUser(getPageUser());
+            }
         } catch (DatabaseException e) {
             DaoManager.rollbackTransaction();
-            initUser(userToSave, oldUserdata);
             log.error("Error on user save to DB", e);
             displayErrorMessageWithUserLocale("accountEditBeanEditUserDataSaveError");
             return;
         } catch (IOException | MessagingException e) {
             DaoManager.rollbackTransaction();
-            initUser(userToSave, oldUserdata);
             log.error(e.getMessage(), e);
             displayErrorMessageWithUserLocale("accountEditBeanSendEmailError");
             return;
         }
 
-        getUserBean().updateUserAuthorities();
         displaySuccessMessageWithUserLocale("accountEditBeanEditUserDataSaveSuccessfully");
     }
 
+    /**
+     * Sends an activation link to the user's new email address if it has been changed.
+     * And send an email to the old email address of the user that will notify the user of a change in his email address
+     *
+     * @param userWithNewEmail user entity
+     * @param oldUserEmail     user`s old email address
+     * @throws IOException        if something go wrong
+     * @throws MessagingException if something go wrong
+     */
     private void sendEmailToUsers(User userWithNewEmail, String oldUserEmail) throws IOException, MessagingException {
-        UserActivationHelper.sendActivationEmail(userWithNewEmail, getUserBean().getUserLocale());
+        String activationUrl = UserActivationHelper.createActivationUrl(userWithNewEmail.getActivationKey());
+        UserActivationHelper.sendActivationEmail(activationUrl, userWithNewEmail.getEmail(), getUserBean().getUserLocale());
         EmailHelper.sendEmail(oldUserEmail,
                 ResourceHelper.getMessageResource("userEmailChangedEmailMessageSubject",
                         getUserBean().getUserLocale()),

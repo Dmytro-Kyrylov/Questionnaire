@@ -3,6 +3,7 @@ package com.kyrylov.questionnaire.web.beans.page;
 import com.kyrylov.questionnaire.persistence.domain.entities.User;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import com.kyrylov.questionnaire.web.beans.BasePageBean;
+import com.kyrylov.questionnaire.web.security.SecurityHelper;
 import com.kyrylov.questionnaire.web.util.helpers.RedirectHelper;
 import com.kyrylov.questionnaire.web.util.helpers.UserActivationHelper;
 import lombok.Getter;
@@ -36,9 +37,8 @@ public class ActivationBean extends BasePageBean {
                 User activatedAccountUser = UserActivationHelper.activateAccount(key);
                 if (activatedAccountUser != null) {
                     if (getUserBean().getUser() != null
-                            && getUserBean().getUser().getId().equals(activatedAccountUser.getId())) {
-                        getUserBean().setUser(activatedAccountUser);
-                        getUserBean().updateUserAuthorities();
+                            && getUserBean().getUser().getActivationKey().equals(key)) {
+                        getUserBean().setUser(SecurityHelper.updateUserDetailsAndGetDtoOfUser(activatedAccountUser));
                     }
                     return getMessageResourceWithUserLocale("activationBeanActivationSuccess");
                 }

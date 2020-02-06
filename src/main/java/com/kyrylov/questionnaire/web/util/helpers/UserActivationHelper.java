@@ -45,13 +45,12 @@ public class UserActivationHelper {
         return null;
     }
 
-    public static String generateActivationKey(User user) {
-        return user.getEmail().toLowerCase();
+    public static String generateActivationKey(String keyWord) {
+        return keyWord.toLowerCase();
     }
 
-    public static void sendActivationEmail(User user, Locale locale) throws IOException, MessagingException {
-        String activationUrl = createActivationUrl(user.getActivationKey());
-        EmailHelper.sendEmail(user.getEmail(), ResourceHelper.getMessageResource("activationEmailMessageSubject", locale),
+    public static void sendActivationEmail(String activationUrl, String email, Locale locale) throws IOException, MessagingException {
+        EmailHelper.sendEmail(email, ResourceHelper.getMessageResource("activationEmailMessageSubject", locale),
                 ResourceHelper.getMessageResource("activationEmailMessage", locale) + " " + activationUrl);
     }
 

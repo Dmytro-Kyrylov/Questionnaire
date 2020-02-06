@@ -2,6 +2,7 @@ package com.kyrylov.questionnaire.web.security;
 
 import com.kyrylov.questionnaire.persistence.domain.entities.User;
 import com.kyrylov.questionnaire.persistence.domain.entities.UserRole;
+import com.kyrylov.questionnaire.util.dto.UserDto;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,17 +17,13 @@ public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = -3418649344938814821L;
 
     @Getter
-    private User user;
+    private UserDto user;
     private Set<GrantedAuthority> authorities;
 
     UserDetailsImpl(User user) {
-        this.user = user;
-        initAuthorities();
-    }
-
-    public void initAuthorities() {
+        this.user = new UserDto(user);
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (UserRole role : this.user.getRoles()) {
+        for (UserRole role : user.getRoles()) {
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole().name()));
         }
         this.authorities = grantedAuthorities;

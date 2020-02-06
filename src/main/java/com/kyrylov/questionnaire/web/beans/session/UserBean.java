@@ -1,18 +1,15 @@
 package com.kyrylov.questionnaire.web.beans.session;
 
-import com.kyrylov.questionnaire.persistence.domain.entities.User;
 import com.kyrylov.questionnaire.util.TypeOfLocale;
+import com.kyrylov.questionnaire.util.dto.UserDto;
 import com.kyrylov.questionnaire.util.helpers.ResourceHelper;
 import com.kyrylov.questionnaire.web.beans.BaseSessionBean;
-import com.kyrylov.questionnaire.web.security.UserDetailsImpl;
+import com.kyrylov.questionnaire.web.security.SecurityHelper;
 import com.kyrylov.questionnaire.web.util.helpers.UserActivationHelper;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -20,7 +17,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.mail.MessagingException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,23 +37,11 @@ import java.util.Locale;
 @SessionScoped
 public class UserBean extends BaseSessionBean {
 
-    @Getter(AccessLevel.PRIVATE)
-    private enum SpringSecurityAction {
-        LOG_IN("/j_spring_security_check"),
-        LOG_OUT("/logout");
-
-        private String servletURL;
-
-        SpringSecurityAction(String servletURL) {
-            this.servletURL = servletURL;
-        }
-    }
-
     private static final long serialVersionUID = 8904223199987995841L;
 
     private Locale userLocale;
 
-    private User user;
+    private UserDto user;
 
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
@@ -68,19 +52,12 @@ public class UserBean extends BaseSessionBean {
         this.userLocale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
     }
 
-    private void performSpringSecurityAction(SpringSecurityAction action, HttpServletRequest request, HttpServletResponse response) {
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(action.getServletURL());
-        try {
-            requestDispatcher.forward(request, response);
-        } catch (ServletException | IOException e) {
-            e.printStackTrace();
-        }
-        FacesContext.getCurrentInstance().responseComplete();
-    }
-
-    public void logout() {
+    /**
+     * Spring security logout
+     */
+    public void logout() throws ServletException, IOException {
         FacesContext ctx = FacesContext.getCurrentInstance();
-        performSpringSecurityAction(SpringSecurityAction.LOG_OUT,
+        SecurityHelper.performSpringSecurityAction(SecurityHelper.SpringSecurityAction.LOG_OUT,
                 (HttpServletRequest) ctx.getExternalContext().getRequest(),
                 (HttpServletResponse) ctx.getExternalContext().getResponse());
     }
@@ -88,23 +65,11 @@ public class UserBean extends BaseSessionBean {
     /**
      * Spring security authentication
      */
-    public void login() {
+    public void login() throws ServletException, IOException {
         FacesContext ctx = FacesContext.getCurrentInstance();
-        performSpringSecurityAction(SpringSecurityAction.LOG_IN,
+        SecurityHelper.performSpringSecurityAction(SecurityHelper.SpringSecurityAction.LOG_IN,
                 (HttpServletRequest) ctx.getExternalContext().getRequest(),
                 (HttpServletResponse) ctx.getExternalContext().getResponse());
-    }
-
-    /**
-     * Update user rights if his roles have changed and he is logged in
-     */
-    public void updateUserAuthorities() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        userDetails.initAuthorities();
-        Authentication newAuth = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(),
-                authentication.getCredentials(), userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
     /**
@@ -142,7 +107,8 @@ public class UserBean extends BaseSessionBean {
             }
         }
         try {
-            UserActivationHelper.sendActivationEmail(getUser(), getUserLocale());
+            String activationUrl = UserActivationHelper.createActivationUrl(getUser().getActivationKey());
+            UserActivationHelper.sendActivationEmail(activationUrl, getUser().getEmail(), getUserLocale());
         } catch (IOException | MessagingException e) {
             log.error(e.getMessage(), e);
             FacesContext.getCurrentInstance().addMessage(null,

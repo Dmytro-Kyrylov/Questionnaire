@@ -1,8 +1,11 @@
 package com.kyrylov.questionnaire.web.beans.page;
 
 import com.kyrylov.questionnaire.persistence.dao.DaoManager;
+import com.kyrylov.questionnaire.persistence.domain.entities.User;
+import com.kyrylov.questionnaire.persistence.domain.entities.User_;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import com.kyrylov.questionnaire.web.beans.BasePageBean;
+import com.kyrylov.questionnaire.web.security.SecurityHelper;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -57,20 +60,21 @@ public class ChangePasswordBean extends BasePageBean {
             return;
         }
 
-        getUserBean().getUser().setPassword(newPasswordEncoded);
         try {
-            DaoManager.save(getUserBean().getUser(), true);
+            User user = DaoManager.select(User.class).where()
+                    .equal(User_.EMAIL, getUserBean().getUser().getEmail()).execute().get(0);
+            user.setPassword(newPasswordEncoded);
+            DaoManager.save(user, true);
+
+            getUserBean().setUser(SecurityHelper.updateUserDetailsAndGetDtoOfUser(user));
         } catch (DatabaseException e) {
             log.error("Error when trying to edit user password", e);
-
-            getUserBean().getUser().setPassword(oldPassword);
-
             displayErrorMessageWithUserLocale("changePasswordBeanPasswordSaveError");
             return;
         }
 
         setNewPassword(null);
-        getUserBean().updateUserAuthorities();
+
         displaySuccessMessageWithUserLocale("changePasswordBeanSaveSuccessfully");
     }
 

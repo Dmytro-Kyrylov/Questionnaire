@@ -92,9 +92,12 @@ public class QuestionnaireBean extends BasePageBean {
     public void confirmResponse() {
         Response response = new Response();
         response.setDate(new Date());
-        response.setUser(getUserBean().getUser());
 
         try {
+            User user = DaoManager.select(User.class).where()
+                    .equal(User_.EMAIL, getUserBean().getUser().getEmail()).execute().get(0);
+            response.setUser(user);
+
             DaoManager.beginTransaction();
             DaoManager.save(response);
             for (Map.Entry<Field, ResponseData> fieldResponseDataEntry : getFieldValues().entrySet()) {

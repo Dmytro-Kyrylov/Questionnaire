@@ -18,7 +18,7 @@ public class User extends IndexedEntity {
 
     private static final long serialVersionUID = 4840028749242007410L;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password")

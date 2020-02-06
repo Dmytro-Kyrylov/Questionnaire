@@ -57,7 +57,8 @@ public class ResourceHelper {
 
         public enum ProjectProperties implements PropertiesHandler {
             DEFAULT_APPLICATION_LOCALE("defaultLocale"),
-            QUESTIONNAIRE_FILE_SAVE_PATH("questionnaireFileSavePath");
+            QUESTIONNAIRE_FILE_SAVE_PATH("questionnaireFileSavePath"),
+            SESSION_MANAGER_CLASS("com.kyrylov.questionnaire.persistence.util.SessionManager");
 
             private String value;
 

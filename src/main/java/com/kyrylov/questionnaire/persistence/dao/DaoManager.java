@@ -7,7 +7,7 @@ import com.kyrylov.questionnaire.persistence.domain.entities.Field;
 import com.kyrylov.questionnaire.persistence.domain.entities.Field_;
 import com.kyrylov.questionnaire.persistence.domain.interfaces.IEntity;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
-import com.kyrylov.questionnaire.persistence.util.SessionHolder;
+import com.kyrylov.questionnaire.persistence.util.HibernateUtil;
 import com.kyrylov.questionnaire.persistence.util.SessionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
@@ -37,18 +37,13 @@ public final class DaoManager {
         SAVE, DELETE
     }
 
-    private static final SessionManager SESSION_MANAGER = SessionManager.getInstance();
+    private static final SessionManager SESSION_MANAGER = HibernateUtil.getSessionManager();
 
     /**
-     * @return session that linked to user httpSession or application session if no httpSession exist
+     * @return session that linked to user httpSession or new session if no httpSession exist
      */
     public static Session getSession() {
-        SessionHolder sessionHolder = SESSION_MANAGER.getSessionByBean();
-        if (sessionHolder == null) {
-            return SESSION_MANAGER.getApplicationSession();
-        } else {
-            return sessionHolder.getSession();
-        }
+        return SESSION_MANAGER.getSessionHolder().getSession();
     }
 
     /**
@@ -195,11 +190,11 @@ public final class DaoManager {
             }
             switch (operation) {
                 case SAVE:
-                    if (getSession().contains(entity)) {
+                    if (session.contains(entity)) {
                         //noinspection unchecked
-                        entity = (T) getSession().merge(entity);
+                        entity = (T) session.merge(entity);
                     } else {
-                        getSession().saveOrUpdate(entity);
+                        session.saveOrUpdate(entity);
                     }
                     break;
                 case DELETE:

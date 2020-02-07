@@ -1,14 +1,12 @@
 package com.kyrylov.questionnaire.persistence.dao;
 
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 @Slf4j
-public abstract class JPAHibernateTest {
-
-    private static SessionFactory sessionFactory;
+abstract class JPAHibernateTest {
 
     @BeforeAll
     static void beforeAll() {
@@ -17,6 +15,11 @@ public abstract class JPAHibernateTest {
 
     @AfterAll
     static void afterAll() {
+
+    }
+
+    @BeforeEach
+    void setUp() {
 
     }
 

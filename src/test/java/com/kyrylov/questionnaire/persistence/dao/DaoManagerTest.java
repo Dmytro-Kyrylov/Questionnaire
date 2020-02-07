@@ -1,9 +1,6 @@
 package com.kyrylov.questionnaire.persistence.dao;
 
-import com.kyrylov.questionnaire.persistence.domain.entities.Field;
-import com.kyrylov.questionnaire.persistence.domain.entities.Field_;
-import com.kyrylov.questionnaire.persistence.domain.entities.Option;
-import com.kyrylov.questionnaire.persistence.domain.entities.Option_;
+import com.kyrylov.questionnaire.persistence.domain.entities.*;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
@@ -17,36 +14,50 @@ import java.util.List;
 class DaoManagerTest extends JPAHibernateTest {
 
     @Test
-    void get() throws DatabaseException {
+    void testGet() throws DatabaseException {
         Field field = new Field();
         field.setLabel("test");
-        DaoManager.save(field);
-
+        DaoManager.save(field, true);
+        Assertions.assertNotNull(field.getId(), "Field was not saved");
         DaoManager.getSession().evict(field);
-        Assertions.assertFalse(DaoManager.getSession().contains(field));
+        Assertions.assertFalse(DaoManager.getSession().contains(field), "Field still in session");
 
         Field field1 = DaoManager.get(Field.class, field.getId());
 
-        Assertions.assertEquals(field.getLabel(), field1.getLabel());
+        Assertions.assertEquals(field.getLabel(), field1.getLabel(), "Fields are different");
     }
 
     @Test
-    void bracketsException() {
+    void testGetByField() throws DatabaseException {
+        User user = new User();
+        user.setEmail("test");
+        DaoManager.save(user, true);
+        Assertions.assertNotNull(user.getId(), "User was not saved");
+        DaoManager.getSession().evict(user);
+        Assertions.assertFalse(DaoManager.getSession().contains(user), "User still in session");
+        User userByField = DaoManager.getByField(User.class, User_.EMAIL, user.getEmail());
+        Assertions.assertEquals(user.getEmail(), userByField.getEmail(), "Users are different");
+    }
+
+    @Test
+    void testBracketsException() {
         Assertions.assertThrows(DatabaseException.class, () -> DaoManager.select(Field.class).where().openBracket().execute());
+        Assertions.assertThrows(DatabaseException.class, () -> DaoManager.select(Field.class).where().closeBracket().execute());
     }
 
     @Test
     void getCount() throws DatabaseException {
+        Long count1 = DaoManager.getCount(Field.class).execute().get(0);
+        Assertions.assertNotNull(count1, "Count is empty");
+
         Field field = new Field();
         field.setLabel("fieldTest1");
-        Field field1 = new Field();
-        field1.setLabel("fieldTest2");
-        DaoManager.save(field);
-        Long count = DaoManager.getCount(Field.class).execute().get(0);
-        Assertions.assertEquals(1L, count);
-        DaoManager.save(field1);
-        count = DaoManager.getCount(Field.class).execute().get(0);
-        Assertions.assertEquals(2L, count);
+        DaoManager.save(field, true);
+        Assertions.assertNotNull(field.getId(), "Field was not saved");
+
+        Long count2 = DaoManager.getCount(Field.class).execute().get(0);
+        Assertions.assertNotNull(count1, "Count is empty");
+        Assertions.assertEquals(count1 + 1, count2, "Wrong count of fields after saving");
     }
 
     @Test
@@ -54,45 +65,44 @@ class DaoManagerTest extends JPAHibernateTest {
     void testSelect() throws DatabaseException {
         Field field = new Field();
         Option option = new Option();
+
         field.setLabel("fieldTest");
         option.setText("optionTest");
         option.setField(field);
         field.setOptions(Collections.singletonList(option));
 
-        DaoManager.save(field);
+        DaoManager.save(field, true);
         Assertions.assertNotNull(field.getId(), "field`s id is null");
-        Assertions.assertTrue(field.getOptions().size() != 0, "options are empty");
         Assertions.assertNotNull(option.getId(), "option`s id is null");
 
         List<Option> options = DaoManager.select(Option.class).where().equal(Option_.FIELD, field).execute();
-        Assertions.assertEquals(1, options.size());
-        options = DaoManager.select(Option.class).innerJoin(Option_.FIELD, "f")
-                .where().equal(Field_.ID, field.getId(), "f").execute();
-        Assertions.assertEquals(1, options.size());
-        Assertions.assertEquals("optionTest", options.get(0).getText());
-        List<Field> fields = DaoManager.select(Field.class).execute();
-        Assertions.assertEquals(1, fields.size());
-        Assertions.assertEquals("fieldTest", fields.get(0).getLabel());
+        Assertions.assertEquals(1, options.size(), "Wrong count of options in database");
+
+        Assertions.assertEquals(option.getText(), options.get(0).getText(), "Different options");
+
+        List<Field> fields = DaoManager.select(Field.class).where().equal(Field_.ID, field.getId()).execute();
+        Assertions.assertEquals(field.getLabel(), fields.get(0).getLabel(), "Fields are different");
     }
 
     @Test
     void testSave() throws DatabaseException {
         Field field = new Field();
         field.setLabel("test");
-        DaoManager.save(field);
-        Assertions.assertNotNull(field.getId());
+        DaoManager.save(field, true);
+        Assertions.assertNotNull(field.getId(), "Entity was not saved");
     }
 
     @Test
     void testDelete() throws DatabaseException {
         Field field = new Field();
         field.setLabel("test");
-        DaoManager.save(field);
-        Assertions.assertNotNull(field.getId());
+        DaoManager.save(field, true);
+        Assertions.assertNotNull(field.getId(), "Entity was not saved");
 
-        DaoManager.delete(field);
-        Long count = DaoManager.getCount(Field.class).execute().get(0);
-        Assertions.assertEquals(0L, count,"Get count returned not 0");
+        DaoManager.delete(field, true);
+        DaoManager.getSession().evict(field);
+
+        Assertions.assertThrows(DatabaseException.class, () -> DaoManager.get(Field.class, field.getId()));
     }
 
 }

@@ -3,8 +3,6 @@ package com.kyrylov.questionnaire.persistence.dao;
 import com.kyrylov.questionnaire.persistence.dao.builders.JoinBuilder;
 import com.kyrylov.questionnaire.persistence.domain.IndexedEntity;
 import com.kyrylov.questionnaire.persistence.domain.IndexedEntity_;
-import com.kyrylov.questionnaire.persistence.domain.entities.Field;
-import com.kyrylov.questionnaire.persistence.domain.entities.Field_;
 import com.kyrylov.questionnaire.persistence.domain.interfaces.IEntity;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import com.kyrylov.questionnaire.persistence.util.HibernateUtil;
@@ -217,7 +215,7 @@ public final class DaoManager {
             switch (operation) {
                 case SAVE:
                     if (session.contains(entity)) {
-                        //noinspection unchecked
+                        //noinspection unchecked,UnusedAssignment
                         entity = (T) session.merge(entity);
                     } else {
                         session.saveOrUpdate(entity);

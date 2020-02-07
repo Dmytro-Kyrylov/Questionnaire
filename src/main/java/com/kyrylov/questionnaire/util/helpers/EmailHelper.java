@@ -1,6 +1,4 @@
-package com.kyrylov.questionnaire.web.util.helpers;
-
-import com.kyrylov.questionnaire.util.helpers.ResourceHelper;
+package com.kyrylov.questionnaire.util.helpers;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;

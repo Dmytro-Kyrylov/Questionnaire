@@ -1,12 +1,12 @@
-package com.kyrylov.questionnaire.web.util.helpers;
+package com.kyrylov.questionnaire.util.helpers;
 
 import com.kyrylov.questionnaire.persistence.dao.DaoManager;
 import com.kyrylov.questionnaire.persistence.domain.entities.User;
 import com.kyrylov.questionnaire.persistence.domain.entities.UserRole;
 import com.kyrylov.questionnaire.persistence.domain.entities.User_;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
-import com.kyrylov.questionnaire.util.helpers.ResourceHelper;
 import com.kyrylov.questionnaire.web.util.Page;
+import com.kyrylov.questionnaire.web.util.helpers.RedirectHelper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.faces.context.FacesContext;

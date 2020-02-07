@@ -30,7 +30,7 @@ public class SecurityHelper {
     }
 
     public static void performSpringSecurityAction(SpringSecurityAction action, HttpServletRequest request,
-                                             HttpServletResponse response) throws ServletException, IOException {
+                                                   HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(action.getServletURL());
         requestDispatcher.forward(request, response);
         FacesContext.getCurrentInstance().responseComplete();

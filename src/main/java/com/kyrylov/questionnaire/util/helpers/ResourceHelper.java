@@ -106,11 +106,11 @@ public class ResourceHelper {
     }
 
     public static String getFileCreatingResource(String resourceName, Locale locale) {
-        return getResource(resourceName, locale, "/locale/file_resources");
+        return getResource(resourceName, locale, "locale/file_resources");
     }
 
     public static String getMessageResource(String resourceName, Locale locale) {
-        return getResource(resourceName, locale, "/locale/messages");
+        return getResource(resourceName, locale, "locale/messages");
     }
 
     private static String getResource(String resourceName, Locale locale, String bundleLocation) {

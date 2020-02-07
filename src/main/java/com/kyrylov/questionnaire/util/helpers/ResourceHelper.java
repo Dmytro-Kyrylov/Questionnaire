@@ -37,9 +37,6 @@ public class ResourceHelper {
         }
 
         public enum EmailProperties implements PropertiesHandler {
-            TRANSPORT_PROTOCOL("mail.transport.protocol"),
-            SMTPS_AUTH("mail.smtps.auth"),
-            SMTPS_HOST("mail.smtps.host"),
             SMTPS_USER("mail.smtps.user"),
             SMTPS_PASSWORD("mail.smtps.password");
 

@@ -55,8 +55,7 @@ public class AccountEditBean extends BasePageBean {
         }
 
         try {
-            User user = DaoManager.select(User.class).where()
-                    .equal(User_.EMAIL, getUserBean().getUser().getEmail()).execute().get(0);
+            User user = DaoManager.get(User.class, getUserBean().getUserId());
             DaoManager.beginTransaction();
 
             if (!getPageUser().getEmail().equals(user.getEmail())) {

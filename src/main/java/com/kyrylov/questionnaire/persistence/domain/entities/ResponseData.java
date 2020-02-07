@@ -58,8 +58,11 @@ public class ResponseData implements IEntity {
     @MapsId("responseId")
     private Response response;
 
-    @Column(name = "data")
-    private String data;
+    @Column(name = "text")
+    private String text;
+
+    @Column(name = "big_text", columnDefinition = "TEXT")
+    private String bigText;
 
     @Column(name = "date_data")
     private Date date;
@@ -85,15 +88,17 @@ public class ResponseData implements IEntity {
     }
 
     public boolean isEmpty() {
-        return (getData() == null || getData().isEmpty()) && getDate() == null && getDocument() == null
+        return (getText() == null || getText().isEmpty()) && (getBigText() == null || getBigText().isEmpty())
+                && getDate() == null && getDocument() == null
                 && (getSelectedOptions() == null || getSelectedOptions().size() == 0);
     }
 
     public String getDataAccordingTypeAsString() {
         switch (this.getField().getType()) {
             case SINGLE_LINE_TEXT:
+                return this.getText();
             case MULTILINE_TEXT:
-                return this.getData();
+                return this.getBigText();
             case RADIO_BUTTON:
             case CHECKBOX:
             case COMBOBOX:

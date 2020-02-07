@@ -94,9 +94,9 @@ public class QuestionnaireBean extends BasePageBean {
         response.setDate(new Date());
 
         try {
-            User user = DaoManager.select(User.class).where()
-                    .equal(User_.EMAIL, getUserBean().getUser().getEmail()).execute().get(0);
-            response.setUser(user);
+            if (getUserBean().getUserId() != null) {
+                response.setUser(DaoManager.get(User.class, getUserBean().getUserId()));
+            }
 
             DaoManager.beginTransaction();
             DaoManager.save(response);

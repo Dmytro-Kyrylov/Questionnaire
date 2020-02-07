@@ -44,6 +44,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
                 if (attribute.contains(UserBean.class.getName())) {
                     UserBean userBean = (UserBean) (((SerializableContextualInstance) session.getAttribute(attribute)).getInstance());
                     userBean.setUser(userDetails.getUser());
+                    userBean.setUserId(userDetails.getUserId());
                     break;
                 }
             }

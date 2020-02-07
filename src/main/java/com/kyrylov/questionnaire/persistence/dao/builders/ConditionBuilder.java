@@ -145,9 +145,13 @@ public class ConditionBuilder<T extends IEntity, L extends Serializable> extends
      * Create predicate by this level(bracket`s restrictions) and remove this level from stack
      *
      * @return this builder
+     * @throws DatabaseException if was closed not existing bracket
      */
-    public ConditionBuilder<T, L> closeBracket() {
+    public ConditionBuilder<T, L> closeBracket() throws DatabaseException {
         Tuple predicateTuple = predicates.pop();
+        if (predicates.empty()) {
+            throw new DatabaseException("Closing not existing bracket");
+        }
         createPredicate(predicateTuple.getPredicate());
         return this;
     }

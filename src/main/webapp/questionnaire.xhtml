@@ -5,12 +5,12 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/resources/templates/main_template.xhtml">
     <ui:define name="body">
 
         <p:outputPanel styleClass="panel-center-of-page" id="fieldSection">
-            <p:outputPanel styleClass="column-panel">
+            <p:outputPanel styleClass="c\olumn-panel">
                 <ui:repeat value="#{questionnaireBean.fields}" var="field">
                     <p:outputPanel>
                         <h:outputText value="#{field.label}"/>
@@ -18,41 +18,50 @@
                         <h:outputText value=":"/>
                     </p:outputPanel>
 
-                    <p:inputText value="#{questionnaireBean.fieldValues.get(field).data}" required="#{field.required}"
-                                 rendered="#{field.type == enums.fieldTypeSINGLE_LINE_TEXT}" maxlength="255"/>
-                    <p:message for="@previous" display="icon"/>
+                    <p:outputPanel rendered="#{field.type == enums.fieldTypeSINGLE_LINE_TEXT}">
+                        <p:inputText value="#{questionnaireBean.fieldValues.get(field).text}"
+                                     required="#{field.required}" maxlength="255"/>
+                        <p:message for="@previous" display="icon"/>
+                    </p:outputPanel>
 
-                    <p:inputTextarea value="#{questionnaireBean.fieldValues.get(field).data}" required="#{field.required}"
-                                     rendered="#{field.type == enums.fieldTypeMULTILINE_TEXT}" maxlength="255"/>
-                    <p:message for="@previous" display="icon"/>
+                    <p:outputPanel rendered="#{field.type == enums.fieldTypeMULTILINE_TEXT}">
+                        <p:inputTextarea value="#{questionnaireBean.fieldValues.get(field).bigText}"
+                                         required="#{field.required}"/>
+                        <p:message for="@previous" display="icon"/>
+                    </p:outputPanel>
 
-                    <p:selectManyCheckbox value="#{questionnaireBean.multipleOptionsForResponseData[field]}"
-                                          converter="#{questionnaireBean.converter}"
-                                          rendered="#{field.type == enums.fieldTypeCHECKBOX}">
-                        <f:selectItems value="#{questionnaireBean.getOptionList(field)}" var="option1"
-                                       itemLabel="#{option1.label}"/>
-                    </p:selectManyCheckbox>
-                    <p:message for="@previous" display="icon"/>
+                    <p:outputPanel rendered="#{field.type == enums.fieldTypeCHECKBOX}">
+                        <p:selectManyCheckbox value="#{questionnaireBean.multipleOptionsForResponseData[field]}"
+                                              converter="#{questionnaireBean.converter}" required="#{field.required}">
+                            <f:selectItems value="#{questionnaireBean.getOptionList(field)}" var="option1"
+                                           itemLabel="#{option1.label}"/>
+                        </p:selectManyCheckbox>
+                        <p:message for="@previous" display="icon"/>
+                    </p:outputPanel>
 
-                    <p:selectOneRadio value="#{questionnaireBean.singleOptionsForResponseData[field]}"
-                                      converter="#{questionnaireBean.converter}" required="#{field.required}"
-                                      rendered="#{field.type == enums.fieldTypeRADIO_BUTTON}">
-                        <f:selectItems value="#{questionnaireBean.getOptionList(field)}" var="option2"
-                                       itemLabel="#{option2.label}"/>
-                    </p:selectOneRadio>
-                    <p:message for="@previous" display="icon"/>
+                    <p:outputPanel rendered="#{field.type == enums.fieldTypeRADIO_BUTTON}">
+                        <p:selectOneRadio value="#{questionnaireBean.singleOptionsForResponseData[field]}"
+                                          converter="#{questionnaireBean.converter}" required="#{field.required}">
+                            <f:selectItems value="#{questionnaireBean.getOptionList(field)}" var="option2"
+                                           itemLabel="#{option2.label}"/>
+                        </p:selectOneRadio>
+                        <p:message for="@previous" display="icon"/>
+                    </p:outputPanel>
 
-                    <p:selectOneMenu value="#{questionnaireBean.singleOptionsForResponseData[field]}"
-                                     converter="#{questionnaireBean.converter}" required="#{field.required}"
-                                     rendered="#{field.type == enums.fieldTypeCOMBOBOX}">
-                        <f:selectItems value="#{questionnaireBean.getOptionList(field)}" var="option3"
-                                       itemLabel="#{option3.label}"/>
-                    </p:selectOneMenu>
-                    <p:message for="@previous" display="icon"/>
+                    <p:outputPanel rendered="#{field.type == enums.fieldTypeCOMBOBOX}">
+                        <p:selectOneMenu value="#{questionnaireBean.singleOptionsForResponseData[field]}"
+                                         converter="#{questionnaireBean.converter}" required="#{field.required}">
+                            <f:selectItems value="#{questionnaireBean.getOptionList(field)}" var="option3"
+                                           itemLabel="#{option3.label}"/>
+                        </p:selectOneMenu>
+                        <p:message for="@previous" display="icon"/>
+                    </p:outputPanel>
 
-                    <p:datePicker value="#{questionnaireBean.fieldValues.get(field).date}" required="#{field.required}"
-                                  rendered="#{field.type == enums.fieldTypeDATE}" showIcon="true"/>
-                    <p:message for="@previous" display="icon"/>
+                    <p:outputPanel rendered="#{field.type == enums.fieldTypeDATE}">
+                        <p:datePicker value="#{questionnaireBean.fieldValues.get(field).date}"
+                                      required="#{field.required}" showIcon="true"/>
+                        <p:message for="@previous" display="icon"/>
+                    </p:outputPanel>
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeFILE}" styleClass="text-center">
                         <p:fileUpload auto="true" update="fileName, @next" styleClass="fileupload-simple"

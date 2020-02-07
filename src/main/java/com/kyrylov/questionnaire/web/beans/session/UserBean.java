@@ -41,6 +41,8 @@ public class UserBean extends BaseSessionBean {
 
     private Locale userLocale;
 
+    private Long userId;
+
     private UserDto user;
 
     @Getter(AccessLevel.PRIVATE)

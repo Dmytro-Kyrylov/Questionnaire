@@ -31,16 +31,14 @@ public class UserRole extends IndexedEntity {
 
     public static UserRole getRoleByEnum(UserRole.RoleEnum roleEnum) throws DatabaseException {
         try {
-            List<UserRole> roles = DaoManager.select(UserRole.class).where().equal(UserRole_.ROLE, roleEnum).execute();
+            UserRole userRole = DaoManager.getByField(UserRole.class, UserRole_.ROLE, roleEnum);
 
-            if (roles.size() == 0) {
-                UserRole role = new UserRole();
-                role.setRole(roleEnum);
-                DaoManager.save(role, true);
-                return role;
-            } else {
-                return roles.get(0);
+            if (userRole == null) {
+                userRole = new UserRole();
+                userRole.setRole(roleEnum);
+                DaoManager.save(userRole, true);
             }
+            return userRole;
         } catch (DatabaseException e) {
             throw new DatabaseException("Cannot get role", e);
         }

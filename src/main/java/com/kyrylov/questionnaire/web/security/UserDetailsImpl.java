@@ -18,10 +18,13 @@ public class UserDetailsImpl implements UserDetails {
 
     @Getter
     private UserDto user;
+    @Getter
+    private Long userId;
     private Set<GrantedAuthority> authorities;
 
     UserDetailsImpl(User user) {
         this.user = new UserDto(user);
+        this.userId = user.getId();
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         for (UserRole role : user.getRoles()) {
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole().name()));

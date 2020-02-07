@@ -13,7 +13,6 @@ import javax.faces.context.FacesContext;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
 import java.util.Locale;
 
 @Slf4j
@@ -27,13 +26,9 @@ public class UserActivationHelper {
      * @throws DatabaseException if any exception occurs
      */
     public static User activateAccount(String key) throws DatabaseException {
-        List<User> users = DaoManager.select(User.class)
-                .where()
-                .equal(User_.ACTIVATION_KEY, key)
-                .execute();
+        User user = DaoManager.getByField(User.class, User_.ACTIVATION_KEY, key);
 
-        if (users != null && users.size() != 0) {
-            User user = users.get(0);
+        if (user != null) {
             user.setActivationKey(null);
             user.setActive(true);
             user.getRoles().add(UserRole.getRoleByEnum(UserRole.RoleEnum.ROLE_ADMIN));

@@ -40,15 +40,20 @@ public final class DaoManager {
     private static final SessionManager SESSION_MANAGER = HibernateUtil.getSessionManager();
 
     /**
-     * @return session that linked to user httpSession or new session if no httpSession exist
+     * Return session from SessionManager {@link SessionManager}
+     *
+     * @return hibernate session
      */
     public static Session getSession() {
         return SESSION_MANAGER.getSessionHolder().getSession();
     }
 
     /**
+     * Get indexed entity by its id
+     *
      * @param tClass entity class
      * @param id     id of the entity to search
+     * @param <T>    entity class type
      * @return entity related to the id argument
      * @throws DatabaseException if an any exceptions occurs
      */
@@ -60,6 +65,32 @@ public final class DaoManager {
             Root<T> root = criteria.from(tClass);
 
             criteria.where(criteriaBuilder.equal(root.get(IndexedEntity_.ID), id));
+            criteria.select(root);
+            Query<T> query = session.createQuery(criteria);
+            return query.getSingleResult();
+        } catch (Exception e) {
+            throw new DatabaseException("Error when trying to get entity from database", e);
+        }
+    }
+
+    /**
+     * Get an entity with a specific field value
+     *
+     * @param tClass entity class
+     * @param field  field of the entity through which the search will be conducted
+     * @param value  value to find
+     * @param <T>    entity class type
+     * @return entity with the passed field value
+     * @throws DatabaseException if an any exceptions occurs
+     */
+    public static <T extends IEntity> T getByField(Class<T> tClass, String field, Object value) throws DatabaseException {
+        try {
+            Session session = getSession();
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<T> criteria = criteriaBuilder.createQuery(tClass);
+            Root<T> root = criteria.from(tClass);
+
+            criteria.where(criteriaBuilder.equal(root.get(field), value));
             criteria.select(root);
             Query<T> query = session.createQuery(criteria);
             return query.getSingleResult();
@@ -144,11 +175,6 @@ public final class DaoManager {
         } catch (Exception e) {
             throw new DatabaseException("Error when trying to load entities from database", e);
         }
-    }
-
-    public static void main(String[] args) throws DatabaseException {
-        System.out.println(DaoManager.getCount(Field.class).where().openBracket().not().isNull(Field_.ACTIVE).and().not().isNull(Field_.ID).closeBracket().execute().get(0));
-        ;
     }
 
     public static <T extends IEntity> void save(T entity)

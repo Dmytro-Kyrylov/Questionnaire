@@ -2,7 +2,6 @@ package com.kyrylov.questionnaire.web.beans.page;
 
 import com.kyrylov.questionnaire.persistence.dao.DaoManager;
 import com.kyrylov.questionnaire.persistence.domain.entities.User;
-import com.kyrylov.questionnaire.persistence.domain.entities.User_;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import com.kyrylov.questionnaire.web.beans.BasePageBean;
 import com.kyrylov.questionnaire.web.security.SecurityHelper;
@@ -61,8 +60,7 @@ public class ChangePasswordBean extends BasePageBean {
         }
 
         try {
-            User user = DaoManager.select(User.class).where()
-                    .equal(User_.EMAIL, getUserBean().getUser().getEmail()).execute().get(0);
+            User user = DaoManager.get(User.class, getUserBean().getUserId());
             user.setPassword(newPasswordEncoded);
             DaoManager.save(user, true);
 

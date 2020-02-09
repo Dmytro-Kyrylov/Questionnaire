@@ -79,8 +79,19 @@ public abstract class QueryBuilder<T extends IEntity, L extends Serializable> {
      * @return list of results
      * @throws DatabaseException if any exception occurs
      */
-    public List<L> execute() throws DatabaseException {
-        return new QueryConfigurator<>(this).execute();
+    public List<L> list() throws DatabaseException {
+        return new QueryConfigurator<>(this).list();
+    }
+
+    /**
+     * Create new instance of configuration class and execute query
+     * {@link QueryConfigurator}
+     *
+     * @return single result
+     * @throws DatabaseException if any exception occurs
+     */
+    public L singleResult() throws DatabaseException {
+        return new QueryConfigurator<>(this).singleResult();
     }
 
 }

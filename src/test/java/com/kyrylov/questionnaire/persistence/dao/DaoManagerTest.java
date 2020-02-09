@@ -36,18 +36,21 @@ class DaoManagerTest extends JPAHibernateTest {
         DaoManager.getSession().evict(user);
         Assertions.assertFalse(DaoManager.getSession().contains(user), "User still in session");
         User userByField = DaoManager.getByField(User.class, User_.EMAIL, user.getEmail());
+        Assertions.assertNotNull(userByField, "User was not found");
         Assertions.assertEquals(user.getEmail(), userByField.getEmail(), "Users are different");
+
+        Assertions.assertNull(DaoManager.getByField(User.class, User_.EMAIL, "empty"), "User was found? WTF?");
     }
 
     @Test
     void testBracketsException() {
-        Assertions.assertThrows(DatabaseException.class, () -> DaoManager.select(Field.class).where().openBracket().execute());
-        Assertions.assertThrows(DatabaseException.class, () -> DaoManager.select(Field.class).where().closeBracket().execute());
+        Assertions.assertThrows(DatabaseException.class, () -> DaoManager.select(Field.class).where().openBracket().list());
+        Assertions.assertThrows(DatabaseException.class, () -> DaoManager.select(Field.class).where().closeBracket().list());
     }
 
     @Test
     void getCount() throws DatabaseException {
-        Long count1 = DaoManager.getCount(Field.class).execute().get(0);
+        Long count1 = DaoManager.getCount(Field.class).singleResult();
         Assertions.assertNotNull(count1, "Count is empty");
 
         Field field = new Field();
@@ -55,7 +58,7 @@ class DaoManagerTest extends JPAHibernateTest {
         DaoManager.save(field, true);
         Assertions.assertNotNull(field.getId(), "Field was not saved");
 
-        Long count2 = DaoManager.getCount(Field.class).execute().get(0);
+        Long count2 = DaoManager.getCount(Field.class).singleResult();
         Assertions.assertNotNull(count1, "Count is empty");
         Assertions.assertEquals(count1 + 1, count2, "Wrong count of fields after saving");
     }
@@ -75,12 +78,12 @@ class DaoManagerTest extends JPAHibernateTest {
         Assertions.assertNotNull(field.getId(), "field`s id is null");
         Assertions.assertNotNull(option.getId(), "option`s id is null");
 
-        List<Option> options = DaoManager.select(Option.class).where().equal(Option_.FIELD, field).execute();
+        List<Option> options = DaoManager.select(Option.class).where().equal(Option_.FIELD, field).list();
         Assertions.assertEquals(1, options.size(), "Wrong count of options in database");
 
         Assertions.assertEquals(option.getText(), options.get(0).getText(), "Different options");
 
-        List<Field> fields = DaoManager.select(Field.class).where().equal(Field_.ID, field.getId()).execute();
+        List<Field> fields = DaoManager.select(Field.class).where().equal(Field_.ID, field.getId()).list();
         Assertions.assertEquals(field.getLabel(), fields.get(0).getLabel(), "Fields are different");
     }
 

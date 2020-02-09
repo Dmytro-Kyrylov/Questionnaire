@@ -32,6 +32,7 @@ public class QuestionnaireBean extends BasePageBean {
 
     private static final long serialVersionUID = -807505852671021087L;
 
+    @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
     @Inject
     private SocketBean socketBean;
 
@@ -66,7 +67,7 @@ public class QuestionnaireBean extends BasePageBean {
         this.singleOptionsForResponseData = new HashMap<>();
         this.fieldUploadedFiles = new HashMap<>();
         try {
-            this.fields = DaoManager.select(Field.class).where().equal(Field_.ACTIVE, Boolean.TRUE).execute();
+            this.fields = DaoManager.select(Field.class).where().equal(Field_.ACTIVE, Boolean.TRUE).list();
         } catch (DatabaseException e) {
             log.error(e.getMessage(), e);
             displayErrorMessageWithUserLocale("questionnaireBeanErrorOnPageInit");

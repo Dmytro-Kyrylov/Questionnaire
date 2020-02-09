@@ -20,7 +20,7 @@ import java.util.Set;
  * Allow to add more special conditions to database query and also allow to execute it
  *
  * @param <T> entity class type
- * @param <L> resulty class type
+ * @param <L> result class type
  * @author Dmitrii
  */
 @Getter
@@ -35,8 +35,14 @@ public final class QueryConfigurator<T extends IEntity, L extends Serializable> 
     }
 
     @Override
-    public List<L> execute() throws DatabaseException {
-        return DaoManager.select(this);
+    public List<L> list() throws DatabaseException {
+        return DaoManager.getList(this);
+    }
+
+    @Override
+    public L singleResult() throws DatabaseException {
+        setLimit(1);
+        return DaoManager.getSingleResult(this);
     }
 
     /**
@@ -64,7 +70,7 @@ public final class QueryConfigurator<T extends IEntity, L extends Serializable> 
     }
 
     public String getMainEntityAlias() {
-        return getEntityClass().getSimpleName();
+        return super.getEntityClass().getSimpleName();
     }
 
     @Override

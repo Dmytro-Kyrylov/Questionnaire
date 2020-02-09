@@ -5,6 +5,7 @@ import com.kyrylov.questionnaire.persistence.domain.entities.User;
 import com.kyrylov.questionnaire.persistence.domain.entities.UserRole;
 import com.kyrylov.questionnaire.persistence.domain.entities.User_;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
+import com.kyrylov.questionnaire.util.helpers.entities.UserHelper;
 import com.kyrylov.questionnaire.web.util.Page;
 import com.kyrylov.questionnaire.web.util.helpers.RedirectHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class UserActivationHelper {
         if (user != null) {
             user.setActivationKey(null);
             user.setActive(true);
-            user.getRoles().add(UserRole.getRoleByEnum(UserRole.RoleEnum.ROLE_ADMIN));
+            user.getRoles().add(UserHelper.getRoleByEnum(UserRole.RoleEnum.ROLE_ADMIN));
 
             DaoManager.save(user, true);
 

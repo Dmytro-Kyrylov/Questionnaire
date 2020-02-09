@@ -3,10 +3,10 @@ package com.kyrylov.questionnaire.web.beans.page;
 import com.kyrylov.questionnaire.persistence.dao.DaoManager;
 import com.kyrylov.questionnaire.persistence.domain.entities.User;
 import com.kyrylov.questionnaire.persistence.domain.entities.UserRole;
-import com.kyrylov.questionnaire.persistence.domain.entities.User_;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import com.kyrylov.questionnaire.util.dto.UserDto;
 import com.kyrylov.questionnaire.util.helpers.UserActivationHelper;
+import com.kyrylov.questionnaire.util.helpers.entities.UserHelper;
 import com.kyrylov.questionnaire.web.beans.BasePageBean;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -65,7 +65,7 @@ public class AuthorizationBean extends BasePageBean {
 
     public void singUp() {
         try {
-            if (usersRegisteredOnThisEmail() != 0) {
+            if (UserHelper.isUserEmailAlreadyExistInDB(getPageUser().getEmail())) {
                 displayErrorMessageWithUserLocale("authorizationBeanEmailAlreadyExist");
                 return;
             }
@@ -97,13 +97,6 @@ public class AuthorizationBean extends BasePageBean {
         setPageUser(new UserDto());
     }
 
-    private long usersRegisteredOnThisEmail() throws DatabaseException {
-        return DaoManager.getCount(User.class)
-                .where()
-                .equal(User_.EMAIL, getPageUser().getEmail())
-                .execute().get(0);
-    }
-
     private User saveNewUser() throws DatabaseException {
         User user = new User();
 
@@ -118,7 +111,7 @@ public class AuthorizationBean extends BasePageBean {
         }
         user.setActivationKey(UserActivationHelper.generateActivationKey(user.getEmail()));
         user.setActive(Boolean.FALSE);
-        user.getRoles().add(UserRole.getRoleByEnum(UserRole.RoleEnum.ROLE_USER));
+        user.getRoles().add(UserHelper.getRoleByEnum(UserRole.RoleEnum.ROLE_USER));
 
         DaoManager.save(user, true);
 

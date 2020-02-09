@@ -33,6 +33,7 @@ public class FieldManageBean extends BaseLazyEntityModelBean<Field> {
 
     private static final long serialVersionUID = 1581953714944406695L;
 
+    @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
     @Inject
     private SocketBean socketBean;
 
@@ -132,7 +133,7 @@ public class FieldManageBean extends BaseLazyEntityModelBean<Field> {
     public StreamedContent downloadXmlRepresentationOfTable() {
         byte[] content;
         try {
-            content = new XmlFieldFileCreator(getUserBean().getUserLocale(), DaoManager.select(Field.class).execute())
+            content = new XmlFieldFileCreator(getUserBean().getUserLocale(), DaoManager.select(Field.class).list())
                     .createFile();
         } catch (Exception e) {
             log.error("Error on generating field xml - " + e.getMessage(), e);
@@ -147,7 +148,7 @@ public class FieldManageBean extends BaseLazyEntityModelBean<Field> {
     public StreamedContent downloadXlsRepresentationOfTable() {
         byte[] content;
         try {
-            content = new XlsFieldFileCreator(getUserBean().getUserLocale(), DaoManager.select(Field.class).execute())
+            content = new XlsFieldFileCreator(getUserBean().getUserLocale(), DaoManager.select(Field.class).list())
                     .createXls();
         } catch (Exception e) {
             log.error("Error on generating field xls - " + e.getMessage(), e);

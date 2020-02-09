@@ -204,6 +204,8 @@ public class ConditionBuilder<T extends IEntity, L extends Serializable> extends
     }
 
     /**
+     * Create final predicate
+     *
      * @return all entered restrictions in one predicate
      * @throws DatabaseException if brackets are not closed correctly
      */
@@ -220,8 +222,14 @@ public class ConditionBuilder<T extends IEntity, L extends Serializable> extends
     }
 
     @Override
-    public List<L> execute() throws DatabaseException {
+    public List<L> list() throws DatabaseException {
         this.setPredicate(getResultPredicate());
-        return super.execute();
+        return super.list();
+    }
+
+    @Override
+    public L singleResult() throws DatabaseException {
+        this.setPredicate(getResultPredicate());
+        return super.singleResult();
     }
 }

@@ -78,7 +78,7 @@ public final class DaoManager {
      * @param field  field of the entity through which the search will be conducted
      * @param value  value to find
      * @param <T>    entity class type
-     * @return entity with the passed field value
+     * @return entity with the passed field value or null if no such entity in database
      * @throws DatabaseException if an any exceptions occurs
      */
     public static <T extends IEntity> T getByField(Class<T> tClass, String field, Object value) throws DatabaseException {
@@ -90,8 +90,10 @@ public final class DaoManager {
 
             criteria.where(criteriaBuilder.equal(root.get(field), value));
             criteria.select(root);
-            Query<T> query = session.createQuery(criteria);
-            return query.getSingleResult();
+
+            Query<T> query = session.createQuery(criteria).setMaxResults(1);
+
+            return query.getResultList().stream().findFirst().orElse(null);
         } catch (Exception e) {
             throw new DatabaseException("Error when trying to get entity from database", e);
         }
@@ -99,7 +101,7 @@ public final class DaoManager {
 
     /**
      * A method for loading a list of entities from a database with conditions that will be set in the corresponding builders.
-     * The result will be obtained at {@link DaoManager#select(QueryConfigurator)}
+     * The result will be obtained at {@link DaoManager#getList(QueryConfigurator)}
      *
      * @param tClass entity class
      * @return JoinBuilder.class that allow to configure joins, {@link JoinBuilder}
@@ -122,7 +124,7 @@ public final class DaoManager {
 
     /**
      * A method for getting a count of entities from a database with conditions that will be set in the corresponding builders.
-     * The result will be obtained at {@link DaoManager#select(QueryConfigurator)}
+     * The result will be obtained at {@link DaoManager#getList(QueryConfigurator)}
      *
      * @param tClass entity class
      * @return JoinBuilder.class that allow to configure joins, {@link JoinBuilder}
@@ -144,7 +146,7 @@ public final class DaoManager {
     }
 
     /**
-     * Method to get result of query
+     * Method to get list result of query
      *
      * @param queryConfigurator special class that contained all conditions for database query
      * @param <T>               searched entity class
@@ -152,7 +154,7 @@ public final class DaoManager {
      * @return list of results
      * @throws DatabaseException if an any exceptions occurs
      */
-    static <T extends IEntity, L extends Serializable> List<L> select(QueryConfigurator<T, L> queryConfigurator) throws DatabaseException {
+    static <T extends IEntity, L extends Serializable> List<L> getList(QueryConfigurator<T, L> queryConfigurator) throws DatabaseException {
         try {
             if (queryConfigurator.getPredicate() != null) {
                 queryConfigurator.getCriteriaQuery().where(queryConfigurator.getPredicate());
@@ -173,6 +175,19 @@ public final class DaoManager {
         } catch (Exception e) {
             throw new DatabaseException("Error when trying to load entities from database", e);
         }
+    }
+
+    /**
+     * Method to get single result of query
+     *
+     * @param queryConfigurator special class that contained all conditions for database query
+     * @param <T>               searched entity class
+     * @param <L>               result class type
+     * @return single result or null
+     * @throws DatabaseException if an any exceptions occurs
+     */
+    static <T extends IEntity, L extends Serializable> L getSingleResult(QueryConfigurator<T, L> queryConfigurator) throws DatabaseException {
+        return getList(queryConfigurator).stream().findFirst().orElse(null);
     }
 
     public static <T extends IEntity> void save(T entity)

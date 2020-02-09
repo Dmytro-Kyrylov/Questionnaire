@@ -108,6 +108,7 @@ public class EntityLazyListModel<T extends IndexedEntity> extends LazyDataModel<
         try {
             JoinBuilder<T, T> joinBuilder = DaoManager.select(getEntityClass());
 
+            //noinspection unchecked
             QueryConfigurator<T, T> queryConfigurator =
                     (QueryConfigurator<T, T>) getPreparedQuery(joinBuilder, sortField, sortOrder, filters);
 
@@ -119,14 +120,15 @@ public class EntityLazyListModel<T extends IndexedEntity> extends LazyDataModel<
                 this.aliasesWithAttributesSequence = queryConfigurator.getAliasesWithAttributesSequence();
             }
 
-            this.list = queryConfigurator.execute();
+            this.list = queryConfigurator.list();
 
             JoinBuilder<T, Long> joinBuilderForCount = DaoManager.getCount(getEntityClass());
 
+            //noinspection unchecked
             QueryConfigurator<T, Long> queryConfiguratorForCount =
                     (QueryConfigurator<T, Long>) getPreparedQuery(joinBuilderForCount, null, null, filters);
 
-            this.setRowCount(queryConfiguratorForCount.execute().get(0).intValue());
+            this.setRowCount(queryConfiguratorForCount.singleResult().intValue());
         } catch (Exception e) {
             log.error("", e);
         }
@@ -245,11 +247,7 @@ public class EntityLazyListModel<T extends IndexedEntity> extends LazyDataModel<
         }
 
         int rowIndex = getRowIndex();
-        if (rowIndex >= 0 && rowIndex < getList().size()) {
-            return true;
-        } else {
-            return false;
-        }
+        return rowIndex >= 0 && rowIndex < getList().size();
     }
 
     public int getRowCount() {
@@ -257,7 +255,7 @@ public class EntityLazyListModel<T extends IndexedEntity> extends LazyDataModel<
             try {
                 JoinBuilder<T, Long> builder = DaoManager.getCount(getEntityClass());
                 ConditionBuilder<T, ?> conditionBuilder = getJoinsFunc().apply(builder).where();
-                Long count = (Long) getRestrictionsFunc().apply(conditionBuilder).execute().get(0);
+                Long count = (Long) getRestrictionsFunc().apply(conditionBuilder).singleResult();
                 this.totalNumRows = count.intValue();
             } catch (Exception e) {
                 log.error("", e);

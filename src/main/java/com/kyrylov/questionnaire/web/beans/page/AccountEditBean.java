@@ -9,6 +9,7 @@ import com.kyrylov.questionnaire.util.dto.UserDto;
 import com.kyrylov.questionnaire.util.helpers.EmailHelper;
 import com.kyrylov.questionnaire.util.helpers.ResourceHelper;
 import com.kyrylov.questionnaire.util.helpers.UserActivationHelper;
+import com.kyrylov.questionnaire.util.helpers.entities.UserHelper;
 import com.kyrylov.questionnaire.web.beans.BasePageBean;
 import com.kyrylov.questionnaire.web.security.SecurityHelper;
 import lombok.Getter;
@@ -43,7 +44,7 @@ public class AccountEditBean extends BasePageBean {
     public void editAccount() {
         if (!getPageUser().getEmail().equals(getUserBean().getUser().getEmail())) {
             try {
-                if (isUserEmailAlreadyExistInDB(getPageUser().getEmail())) {
+                if (UserHelper.isUserEmailAlreadyExistInDB(getPageUser().getEmail())) {
                     displayErrorMessageWithUserLocale("accountEditBeanEmailIsAlreadyUsedError");
                     return;
                 }
@@ -114,13 +115,5 @@ public class AccountEditBean extends BasePageBean {
                         getUserBean().getUserLocale()),
                 ResourceHelper.getMessageResource("userEmailChangedEmailMessage",
                         getUserBean().getUserLocale()));
-    }
-
-    private boolean isUserEmailAlreadyExistInDB(String newEmail) throws DatabaseException {
-        long usersWithEnteredEmail = DaoManager.getCount(User.class)
-                .where()
-                .equal(User_.EMAIL, newEmail)
-                .execute().get(0);
-        return usersWithEnteredEmail != 0;
     }
 }

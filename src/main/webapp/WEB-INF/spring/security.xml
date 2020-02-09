@@ -26,7 +26,10 @@
         <sec:intercept-url pattern="/Server/Sec/Management/**" access="hasRole('ROLE_ADMIN')"/>
         <sec:intercept-url pattern="/Server/Sec/User/**" access="hasRole('ROLE_USER')"/>
         <sec:intercept-url pattern="/Server/User/authorization.xhtml" access="isAnonymous()"/>
-
+        <sec:headers>
+            <sec:frame-options policy="SAMEORIGIN"/>
+        </sec:headers>
+<!--todo-->
         <sec:form-login login-page="/Server/User/authorization.xhtml" login-processing-url="/j_spring_security_check"
                         authentication-failure-url="/Server/User/authorization.xhtml?authenticationFailed=true"
                         default-target-url="/questionnaire.xhtml" always-use-default-target="true"

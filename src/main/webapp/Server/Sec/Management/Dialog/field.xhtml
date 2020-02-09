@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/resources/templates/main_template.xhtml">
+    <ui:param name="title" value="#{fieldBean.fieldStatus}"/>
+    <ui:param name="displayHeaderForm" value="#{false}"/>
+
+   <ui:define name="body">
+        <p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group eighty-five-percent-height" id="fieldSection"
+                     columnClasses="fifty-percent-width top-alignment, fifty-percent-width top-alignment">
+
+            <p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group">
+                <h:outputText value="#{msg.fieldManageFieldSectionHeaderInDialog}" styleClass="header3"/>
+                <p:outputPanel>
+                    <p:inputText placeholder="#{msg.fieldManageLabel}" value="#{fieldBean.field.label}"
+                                 required="true" maxlength="255"/>
+                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                </p:outputPanel>
+                <p:selectOneMenu value="#{fieldBean.field.type}">
+                    <p:ajax event="change" listener="#{fieldBean.onTypeOfFieldChangeListener}"
+                            update="optionsSection"/>
+                    <f:selectItems value="#{fieldBean.fieldTypes}"/>
+                </p:selectOneMenu>
+                <p:selectBooleanCheckbox value="#{fieldBean.field.active}"
+                                         itemLabel="#{msg.fieldManageIsActive}"/>
+                <p:selectBooleanCheckbox value="#{fieldBean.field.required}"
+                                         itemLabel="#{msg.fieldManageIsRequired}"/>
+            </p:panelGrid>
+
+            <p:outputPanel id="optionsSection">
+                <p:outputPanel rendered="#{fieldBean.displaySectionForOptions}">
+                    <h:outputText value="#{msg.fieldManageOptionsSectionHeaderInDialog}" styleClass="header3"/>
+                    <p:dataTable var="option" value="#{fieldBean.field.options}" scrollable="true"
+                                 scrollHeight="200" id="optionTable" styleClass="without-header">
+                        <p:column>
+                            <h:outputText value="#{option.text}"/>
+                        </p:column>
+                        <p:column style="width: 24%">
+                            <p:commandButton value="X" action="#{fieldBean.field.options.remove(option)}"
+                                             update="optionTable" process="@this"/>
+                        </p:column>
+                    </p:dataTable>
+                    <p:inputText type="hidden" required="true"
+                                 disabled="#{not empty fieldBean.field.options}"/>
+                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    <p:outputPanel>
+                        <p:inputText value="#{fieldBean.optionText}" maxlength="255"/>
+                        <p:commandButton value="#{msg.add}" action="#{fieldBean.addOptionToField}"
+                                         update="optionsSection" styleClass="float-right"
+                                         process="@this, @previous"/>
+                    </p:outputPanel>
+                </p:outputPanel>
+            </p:outputPanel>
+        </p:panelGrid>
+
+        <p:outputPanel styleClass="btn_line">
+            <p:commandButton action="#{fieldBean.saveFieldFromDialog}" process="fieldSection, @this"
+                             value="#{msg.save}" update="messages"/>
+            <p:commandButton value="#{msg.cancel}" process="@this" action="#{fieldBean.closeDialog(enums.dialogResultCANCEL)}"/>
+        </p:outputPanel>
+   </ui:define>
+</ui:composition>
+</html>

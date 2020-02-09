@@ -1,13 +1,16 @@
 package com.kyrylov.questionnaire.web.filters;
 
 import com.kyrylov.questionnaire.persistence.util.SessionHolder;
+import com.kyrylov.questionnaire.web.beans.BasePageBean;
 
+import javax.enterprise.inject.Any;
+import javax.inject.Inject;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
 @WebFilter("*")
-public class HibernateSessionFilter implements Filter {
+public class HibernateRequestFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)

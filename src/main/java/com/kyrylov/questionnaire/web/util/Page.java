@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public enum Page {
     QUESTIONNAIRE("questionnaire.xhtml"),
-    FIELD_MANAGE("Server/Sec/Management/field_manage.xhtml"),
-    RESPONSE_MANAGE("Server/Sec/Management/response_manage.xhtml"),
+    FIELDS("Server/Sec/Management/fields.xhtml"),
+    RESPONSES("Server/Sec/Management/responses.xhtml"),
     RESPONSE_SUCCESS("Server/response_success.xhtml"),
     ACCOUNT_ACTIVATION("Server/User/activation.xhtml"),
     AUTHORIZATION("Server/User/authorization.xhtml"),

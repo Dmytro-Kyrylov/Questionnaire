@@ -12,7 +12,8 @@ public class RedirectHelper {
 
     @Getter
     public enum Parameter {
-        ACTIVATION_KEY_PARAMETER("key");
+        ACTIVATION_KEY_PARAMETER("key"),
+        ID_OF_ENTITY("id");
 
         private String parameter;
 

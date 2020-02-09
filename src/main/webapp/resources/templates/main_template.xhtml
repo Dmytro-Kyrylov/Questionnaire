@@ -7,13 +7,14 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <f:view locale="#{userBean.userLocale}" encoding="utf-8"/>
+
 <h:head>
-    <title>#{msg.mainApplicationPageTitle}</title>
+    <title>#{empty title ? msg.mainApplicationPageTitle : title}</title>
     <link href="#{facesContext.externalContext.requestContextPath}/resources/styles/default.css"
           media="all" rel="stylesheet" type="text/css"/>
 </h:head>
 <h:body>
-    <h:form id="headerForm">
+    <h:form id="headerForm" rendered="#{empty displayHeaderForm ? true : displayHeaderForm}">
         <ui:include src="../components/header.xhtml"/>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </h:form>

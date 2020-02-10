@@ -23,6 +23,7 @@
 
         <message-bundle>locale/page_messages</message-bundle>
         <message-bundle>enums</message-bundle>
+        <message-bundle>locale/validation_page_messages</message-bundle>
 
         <resource-bundle>
             <base-name>locale/page_messages</base-name>
@@ -32,6 +33,11 @@
         <resource-bundle>
             <base-name>enums</base-name>
             <var>enums</var>
+        </resource-bundle>
+
+        <resource-bundle>
+            <base-name>locale/validation_page_messages</base-name>
+            <var>valid</var>
         </resource-bundle>
 
     </application>

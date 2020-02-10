@@ -34,7 +34,7 @@
                                      styleClass="auto-width" process="logInSection" ajax="false"
                                      update="messages, headerForm:header_menu"/>
                     <p:outputPanel>
-                        <p:outputLabel value="#{msg.authorizationMessageForSignUpSection}"/>
+                        <p:outputLabel value="#{msg.authorizationMessageForSignUpSection} "/>
                         <p:commandButton value="#{msg.authorizationSignUpSectionHeader}" process="@this"
                                          action="#{authorizationBean.switchLogInAndSignUpSectionsToShow}"
                                          update="auth_section"/>
@@ -61,7 +61,6 @@
                         <h:outputText value="*" styleClass="red"/>
                         <p:password placeholder="#{msg.authorizationSignUpSectionNewPassword}" styleClass="auto-width"
                                     maxlength="20" feedback="true" value="#{authorizationBean.pageUser.password}"
-                                    weakLabel="fignya" goodLabel="neploho" strongLabel="krasava"
                                     match="confirmPass" required="true">
                             <f:validateLength minimum="6"/>
                         </p:password>
@@ -70,7 +69,8 @@
 
                     <p:outputPanel>
                         <h:outputText value="*" styleClass="red"/>
-                        <p:password id="confirmPass" placeholder="#{msg.authorizationSignUpSectionNewPasswordConfirmation}"
+                        <p:password id="confirmPass"
+                                    placeholder="#{msg.authorizationSignUpSectionNewPasswordConfirmation}"
                                     styleClass="auto-width" required="true" maxlength="20">
                             <f:validateLength minimum="6"/>
                         </p:password>
@@ -97,17 +97,16 @@
                                      value="#{msg.authorizationSignUpButton}" process="signUpSection"
                                      update="messages, headerForm:header_menu, auth_section"/>
                     <p:outputPanel>
-                        <p:outputLabel value="#{msg.authorizationMessageForLogInSection}"/>
+                        <p:outputLabel value="#{msg.authorizationMessageForLogInSection} "/>
                         <p:commandButton value="#{msg.authorizationLogInSectionHeader}" process="@this"
                                          action="#{authorizationBean.switchLogInAndSignUpSectionsToShow}"
                                          update="auth_section"/>
                     </p:outputPanel>
                 </p:panelGrid>
             </p:outputPanel>
-
+            <h:outputText rendered="#{not empty param['authenticationFailed']}"
+                          value="#{msg.authorizationAuthenticationFailed}" styleClass="red"/>
         </p:outputPanel>
-
     </ui:define>
-
 </ui:composition>
 </html>

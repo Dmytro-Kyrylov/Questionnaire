@@ -16,7 +16,7 @@
     color: red;
 }
 
-.submenu-label-red span{
+.submenu-label-red span {
     color: red;
 }
 
@@ -42,9 +42,17 @@
     width: 50%;
 }
 
-.column-panel{
+.column-panel {
     flex-direction: column;
     display: flex
+}
+
+.display-flex {
+    display: flex;
+}
+
+.icon-column {
+    width: 40px;
 }
 
 .without-header thead {
@@ -67,25 +75,25 @@
     border: 0 none;
 }
 
-.float-left{
+.float-left {
     float: left;
 }
 
-.float-right{
+.float-right {
     float: right;
 }
 
-.panel-center-of-page{
+.panel-center-of-page {
     display: flex;
     justify-content: center;
     margin-top: 5%;
 }
 
-.auto-width{
+.auto-width {
     width: -webkit-fill-available;
 }
 
-.header1{
+.header1 {
     display: block;
     font-size: 2em;
     margin-block-start: 0.67em;
@@ -95,7 +103,7 @@
     font-weight: bold;
 }
 
-.header3{
+.header3 {
     text-align: center;
     display: block;
     font-size: 1.17em;

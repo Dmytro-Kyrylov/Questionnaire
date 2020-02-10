@@ -48,8 +48,8 @@
                     <p:inputText type="hidden" required="true"
                                  disabled="#{not empty fieldBean.field.options}"/>
                     <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
-                    <p:outputPanel>
-                        <p:inputText value="#{fieldBean.optionText}" maxlength="255"/>
+                    <p:outputPanel styleClass="display-flex">
+                        <p:inputText value="#{fieldBean.optionText}" maxlength="255" styleClass="auto-width"/>
                         <p:commandButton value="#{msg.add}" action="#{fieldBean.addOptionToField}"
                                          update="optionsSection" styleClass="float-right"
                                          process="@this, @previous"/>

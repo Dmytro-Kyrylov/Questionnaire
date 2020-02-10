@@ -8,6 +8,7 @@ import com.kyrylov.questionnaire.util.helpers.creators.xls.XlsFieldFileCreator;
 import com.kyrylov.questionnaire.util.helpers.creators.xml.XmlFieldFileCreator;
 import com.kyrylov.questionnaire.web.beans.BaseLazyEntityModelBean;
 import com.kyrylov.questionnaire.web.beans.additional.SocketBean;
+import com.kyrylov.questionnaire.web.util.helpers.DialogHelper;
 import com.kyrylov.questionnaire.web.util.helpers.RedirectHelper;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -50,34 +52,36 @@ public class FieldManageBean extends BaseLazyEntityModelBean<Field> {
         }
     }
 
-    public void openFieldDialog(Field field) {
-        Map<String, Object> options = new HashMap<>();
-        options.put("modal", true);
-        options.put("width", 700);
-        options.put("height", 400);
-        options.put("draggable", false);
-        options.put("resizable", false);
-        options.put("contentHeight", "100%");
-        options.put("contentWidth", "100%");
-        //todo
-        options.put("headerElement", "customheader");
-
-        Map<String, List<String>> params = null;
-        if (field != null) {
-            params = new HashMap<>();
-            params.put(RedirectHelper.Parameter.ID_OF_ENTITY.getParameter(),
-                    Collections.singletonList(field.getId().toString()));
+    public void openFieldDialogIfIdParameterExist(){
+        String fieldId = getHttpServletRequest().getParameter(RedirectHelper.Parameter.ID_OF_ENTITY.getParameter());
+        if (fieldId != null && !fieldId.isEmpty()) {
+            openFieldDialog(fieldId);
         }
-        PrimeFaces.current().dialog().openDynamic("Dialog/field", options, params);
     }
 
-    private void handleFieldDialogReturn(SelectEvent event) {
-        if (((boolean) event.getObject())) {
-            getSocketBean().updateResponseTableByPushMessageInApplicationScope();
-            displaySuccessMessageWithUserLocale("fieldManageBeanSaveFieldSuccess");
-        } else {
-            displayErrorMessageWithUserLocale("fieldManageBeanErrorSaveField");
+    public void openFieldDialog(String fieldId) {
+        Map<String, List<String>> params = null;
+        if (fieldId != null && !fieldId.isEmpty()) {
+            params = new HashMap<>();
+            params.put(RedirectHelper.Parameter.ID_OF_ENTITY.getParameter(),
+                    Collections.singletonList(fieldId));
         }
+        PrimeFaces.current().dialog().openDynamic("Dialog/field",
+                DialogHelper.getDialogOptions(true, false, false, 700, 430),
+                params);
+    }
+
+    public void handleFieldDialogReturn(SelectEvent event) {
+        switch ((DialogHelper.DialogResult) event.getObject()) {
+            case SUCCESS:
+                getSocketBean().updateResponseTableByPushMessageInApplicationScope();
+                displaySuccessMessageWithUserLocale("fieldManageBeanSaveFieldSuccess");
+                break;
+            case ERROR:
+                displayErrorMessageWithUserLocale("fieldManageBeanErrorSaveField");
+                break;
+        }
+        ajaxUpdate("messages", "fieldsTable");
     }
 
     public void deleteField(Field field) {

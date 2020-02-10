@@ -12,6 +12,7 @@
     <title>#{empty title ? msg.mainApplicationPageTitle : title}</title>
     <link href="#{facesContext.externalContext.requestContextPath}/resources/styles/default.css"
           media="all" rel="stylesheet" type="text/css"/>
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
 </h:head>
 <h:body>
     <h:form id="headerForm" rendered="#{empty displayHeaderForm ? true : displayHeaderForm}">

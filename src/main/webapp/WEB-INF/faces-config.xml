@@ -36,8 +36,4 @@
 
     </application>
 
-    <lifecycle>
-        <phase-listener>com.kyrylov.questionnaire.web.filters.PhaseListener</phase-listener>
-    </lifecycle>
-
 </faces-config>

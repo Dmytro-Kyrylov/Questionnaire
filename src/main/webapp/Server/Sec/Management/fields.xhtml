@@ -42,9 +42,11 @@
                     </p:commandButton>
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                         <p:outputPanel styleClass="btn_line">
-                            <p:commandButton value="#{msg.confirmationDialogYesButton}" styleClass="ui-confirmdialog-yes"
+                            <p:commandButton value="#{msg.confirmationDialogYesButton}"
+                                             styleClass="ui-confirmdialog-yes"
                                              update="fieldsTable"/>
-                            <p:commandButton value="#{msg.confirmationDialogNoButton}" styleClass="ui-confirmdialog-no"/>
+                            <p:commandButton value="#{msg.confirmationDialogNoButton}"
+                                             styleClass="ui-confirmdialog-no"/>
                         </p:outputPanel>
                     </p:confirmDialog>
                 </p:column>
@@ -56,10 +58,10 @@
             </p:commandButton>
 
             <p:outputPanel styleClass="float-right">
-                <p:commandButton ajax="false" value="#{msg.fieldManageDownloadXLS}">
+                <p:commandButton ajax="false" value="#{msg.fieldManageDownloadXLS}" icon="fa fa-file-excel-o">
                     <p:fileDownload value="#{fieldManageBean.downloadXlsRepresentationOfTable()}"/>
                 </p:commandButton>
-                <p:commandButton ajax="false" value="#{msg.fieldManageDownloadXML}">
+                <p:commandButton ajax="false" value="#{msg.fieldManageDownloadXML}" icon="fa fa-file-code-o">
                     <p:fileDownload value="#{fieldManageBean.downloadXmlRepresentationOfTable()}"/>
                 </p:commandButton>
             </p:outputPanel>

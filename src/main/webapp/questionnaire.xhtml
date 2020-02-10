@@ -82,8 +82,8 @@
         </p:outputPanel>
 
         <p:outputPanel styleClass="btn_line">
-            <p:commandButton value="#{msg.questionnaireSubmit}" update="fieldSection"
-                             action="#{questionnaireBean.confirmResponse}"/>
+            <p:commandButton value="#{msg.questionnaireSubmit}" update="fieldSection" icon="fa fa-fighter-jet"
+                             action="#{questionnaireBean.confirmResponse}" disabled="#{empty questionnaireBean.fields}"/>
         </p:outputPanel>
 
     </ui:define>

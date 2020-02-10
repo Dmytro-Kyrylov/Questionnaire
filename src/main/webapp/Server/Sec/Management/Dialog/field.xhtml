@@ -10,7 +10,7 @@
     <ui:param name="title" value="#{fieldBean.fieldStatus}"/>
     <ui:param name="displayHeaderForm" value="#{false}"/>
 
-   <ui:define name="body">
+    <ui:define name="body">
         <p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group eighty-five-percent-height" id="fieldSection"
                      columnClasses="fifty-percent-width top-alignment, fifty-percent-width top-alignment">
 
@@ -40,8 +40,8 @@
                         <p:column>
                             <h:outputText value="#{option.text}"/>
                         </p:column>
-                        <p:column style="width: 24%">
-                            <p:commandButton value="X" action="#{fieldBean.field.options.remove(option)}"
+                        <p:column styleClass="icon-column">
+                            <p:commandButton icon="fa fa-trash" action="#{fieldBean.field.options.remove(option)}"
                                              update="optionTable" process="@this"/>
                         </p:column>
                     </p:dataTable>
@@ -50,7 +50,7 @@
                     <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
                     <p:outputPanel styleClass="display-flex">
                         <p:inputText value="#{fieldBean.optionText}" maxlength="255" styleClass="auto-width"/>
-                        <p:commandButton value="#{msg.add}" action="#{fieldBean.addOptionToField}"
+                        <p:commandButton icon="fa fa-plus" action="#{fieldBean.addOptionToField}"
                                          update="optionsSection" styleClass="float-right"
                                          process="@this, @previous"/>
                     </p:outputPanel>
@@ -61,8 +61,9 @@
         <p:outputPanel styleClass="btn_line">
             <p:commandButton action="#{fieldBean.saveFieldFromDialog}" process="fieldSection, @this"
                              value="#{msg.save}" update="messages"/>
-            <p:commandButton value="#{msg.cancel}" process="@this" action="#{fieldBean.closeDialog(enums.dialogResultCANCEL)}"/>
+            <p:commandButton value="#{msg.cancel}" process="@this"
+                             action="#{fieldBean.closeDialog(enums.dialogResultCANCEL)}"/>
         </p:outputPanel>
-   </ui:define>
+    </ui:define>
 </ui:composition>
 </html>

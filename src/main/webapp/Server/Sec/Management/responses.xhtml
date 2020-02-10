@@ -41,24 +41,28 @@
                 </p:commandButton>
             </p:columns>
 
-            <p:column style="width: 50px;">
-                <p:commandButton value="X" action="#{responseManageBean.deleteResponse(response)}"
+            <p:column styleClass="icon-column">
+                <p:commandButton icon="fa fa-trash" action="#{responseManageBean.deleteResponse(response)}"
                                  update="responseTable, messages">
                     <p:confirm header="#{msg.confirmationDialogHeader}"
                                message="#{msg.confirmationDialogQuestion}"/>
                 </p:commandButton>
                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                    <p:commandButton value="#{msg.confirmationDialogYesButton}" styleClass="ui-confirmdialog-yes"
-                                     update="responseTable"/>
-                    <p:commandButton value="#{msg.confirmationDialogNoButton}" styleClass="ui-confirmdialog-no"/>
+                    <p:outputPanel styleClass="btn_line">
+                        <p:commandButton value="#{msg.confirmationDialogYesButton}" styleClass="ui-confirmdialog-yes"
+                                         update="responseTable"/>
+                        <p:commandButton value="#{msg.confirmationDialogNoButton}" styleClass="ui-confirmdialog-no"/>
+                    </p:outputPanel>
                 </p:confirmDialog>
             </p:column>
         </p:dataTable>
 
-        <p:commandButton ajax="false" value="#{msg.responseManageDownloadXLS}" styleClass="float-right">
+        <p:commandButton ajax="false" value="#{msg.responseManageDownloadXLS}" styleClass="float-right"
+                         icon="fa fa-file-excel-o">
             <p:fileDownload value="#{responseManageBean.downloadXlsRepresentationOfTable()}"/>
         </p:commandButton>
-        <p:commandButton ajax="false" value="#{msg.responseManageDownloadXML}" styleClass="float-right">
+        <p:commandButton ajax="false" value="#{msg.responseManageDownloadXML}" styleClass="float-right"
+                         icon="fa fa-file-code-o">
             <p:fileDownload value="#{responseManageBean.downloadXmlRepresentationOfTable()}"/>
         </p:commandButton>
     </ui:define>

@@ -22,44 +22,48 @@ public class JoinBuilder<T extends IEntity, L extends Serializable> extends Quer
     }
 
     public JoinBuilder<T, L> innerJoin(String tableAttribute, String alias) {
-        return join(this.getRoot(), tableAttribute, alias, JoinType.INNER, true);
+        return join(this.getRoot(), tableAttribute, alias, JoinType.INNER, false);
     }
 
-    public JoinBuilder<T, L> innerJoin(String tableAttribute, String alias, boolean conditionToUse) {
-        return join(this.getRoot(), tableAttribute, alias, JoinType.INNER, conditionToUse);
+    public JoinBuilder<T, L> innerJoin(String tableAttribute, String alias, boolean fetch) {
+        return join(this.getRoot(), tableAttribute, alias, JoinType.INNER, fetch);
     }
 
     public JoinBuilder<T, L> innerJoin(String mainTable, String tableAttribute, String alias) {
-        return join(getFromMap().get(mainTable), tableAttribute, alias, JoinType.INNER, true);
+        return join(getFromMap().get(mainTable), tableAttribute, alias, JoinType.INNER, false);
     }
 
-    public JoinBuilder<T, L> innerJoin(String mainTable, String tableAttribute, String alias, boolean conditionToUse) {
-        return join(getFromMap().get(mainTable), tableAttribute, alias, JoinType.INNER, conditionToUse);
+    public JoinBuilder<T, L> innerJoin(String mainTable, String tableAttribute, String alias, boolean fetch) {
+        return join(getFromMap().get(mainTable), tableAttribute, alias, JoinType.INNER, fetch);
     }
 
     public JoinBuilder<T, L> leftJoin(String tableAttribute, String alias) {
-        return join(this.getRoot(), tableAttribute, alias, JoinType.LEFT, true);
+        return join(this.getRoot(), tableAttribute, alias, JoinType.LEFT, false);
     }
 
-    public JoinBuilder<T, L> leftJoin(String tableAttribute, String alias, boolean conditionToUse) {
-        return join(this.getRoot(), tableAttribute, alias, JoinType.LEFT, conditionToUse);
+    public JoinBuilder<T, L> leftJoin(String tableAttribute, String alias, boolean fetch) {
+        return join(this.getRoot(), tableAttribute, alias, JoinType.LEFT, fetch);
     }
 
     public JoinBuilder<T, L> leftJoin(String mainTable, String tableAttribute, String alias) {
-        return join(getFromMap().get(mainTable), tableAttribute, alias, JoinType.LEFT, true);
+        return join(getFromMap().get(mainTable), tableAttribute, alias, JoinType.LEFT, false);
     }
 
-    public JoinBuilder<T, L> leftJoin(String mainTable, String tableAttribute, String alias, boolean conditionToUse) {
-        return join(getFromMap().get(mainTable), tableAttribute, alias, JoinType.LEFT, conditionToUse);
+    public JoinBuilder<T, L> leftJoin(String mainTable, String tableAttribute, String alias, boolean fetch) {
+        return join(getFromMap().get(mainTable), tableAttribute, alias, JoinType.LEFT, fetch);
     }
 
     private <X extends IEntity> JoinBuilder<T, L> join(From<X, ? extends IEntity> from, String tableAttribute,
-                                                       String alias, JoinType joinType, boolean conditionToUse) {
-        if (conditionToUse) {
-            Join<X, ? extends IEntity> join = from.join(tableAttribute, joinType);
-            join.alias(alias);
-            getFromMap().put(alias, join);
+                                                       String alias, JoinType joinType, boolean fetch) {
+        Join<X, ? extends IEntity> join;
+        if (fetch) {
+            //noinspection unchecked
+            join = (Join) from.fetch(tableAttribute, joinType);
+        } else {
+            join = from.join(tableAttribute, joinType);
         }
+        join.alias(alias);
+        getFromMap().put(alias, join);
         return this;
     }
 

@@ -1,28 +1,34 @@
 package com.kyrylov.questionnaire.util.dto;
 
 import com.kyrylov.questionnaire.persistence.domain.entities.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO class for user entity
+ * {@link com.kyrylov.questionnaire.persistence.domain.entities.User}
+ *
+ * @author Dmitrii
+ */
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
-public class UserDto implements Cloneable {
+public class UserDto implements IDto, Cloneable {
+
+    private static final long serialVersionUID = -8742176469880025594L;
+
     private String firstName;
     private String lastName;
     private String email;
     private String phone;
     private String password;
-    private boolean active;
+    private Boolean active;
     private String activationKey;
 
     public UserDto(User user) {
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.email = user.getEmail();
-        this.phone = user.getPhone();
-        this.password = user.getPassword();
-        this.active = user.getActive() != null ? user.getActive() : false;
-        this.activationKey = user.getActivationKey();
+        this(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(),
+                user.getPassword(), user.getActive(), user.getActivationKey());
     }
 
     @SuppressWarnings("MethodDoesntCallSuperMethod")
@@ -34,7 +40,7 @@ public class UserDto implements Cloneable {
         userDto.setEmail(this.getEmail());
         userDto.setPassword(this.getPassword());
         userDto.setPhone(this.getPhone());
-        userDto.setActive(this.isActive());
+        userDto.setActive(this.getActive());
         userDto.setActivationKey(this.getActivationKey());
         return userDto;
     }

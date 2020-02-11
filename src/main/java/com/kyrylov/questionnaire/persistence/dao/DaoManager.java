@@ -7,6 +7,7 @@ import com.kyrylov.questionnaire.persistence.domain.interfaces.IEntity;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import com.kyrylov.questionnaire.persistence.util.HibernateUtil;
 import com.kyrylov.questionnaire.persistence.util.SessionManager;
+import com.kyrylov.questionnaire.util.dto.IDto;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -16,9 +17,11 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.LinkedList;
 import java.util.List;
-
 
 /**
  * Main class to work with database
@@ -100,7 +103,7 @@ public final class DaoManager {
     }
 
     /**
-     * A method for loading a list of entities from a database with conditions that will be set in the corresponding builders.
+     * A method for loading entities from a database with conditions that will be set in the corresponding builders.
      * The result will be obtained at {@link DaoManager#getList(QueryConfigurator)}
      *
      * @param tClass entity class
@@ -140,6 +143,43 @@ public final class DaoManager {
             criteria.select(criteriaBuilder.count(root));
 
             return new JoinBuilder<>(tClass, session, criteriaBuilder, criteria, root);
+        } catch (Exception e) {
+            throw new DatabaseException("Error when trying to get count of entities from database", e);
+        }
+    }
+
+    /**
+     * Allow to load entities from a database as DTO objects with conditions that will be set in the corresponding builders.
+     * The result will be obtained at {@link DaoManager#getList(QueryConfigurator)}
+     * <p>
+     * Loads all attributes that are defined as fields in the DTO class and are not static or transient.
+     *
+     * @param entityClass class of mapped by JPA entity
+     * @param dtoClass    simple DTO class for entity class
+     * @param <T>         entity class type
+     * @param <D>         DTO class type
+     * @return JoinBuilder.class that allow to configure joins, {@link JoinBuilder}
+     * @throws DatabaseException if an any exceptions occurs
+     */
+    public static <T extends IEntity, D extends IDto> JoinBuilder<T, D> select(Class<T> entityClass, Class<D> dtoClass)
+            throws DatabaseException {
+        try {
+            Session session = getSession();
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<D> criteria = criteriaBuilder.createQuery(dtoClass);
+            Root<T> root = criteria.from(entityClass);
+
+            List<Selection<?>> fields = new LinkedList<>();
+            for (Field field : dtoClass.getDeclaredFields()) {
+                if (!java.lang.reflect.Modifier.isStatic(field.getModifiers())
+                        && !java.lang.reflect.Modifier.isTransient(field.getModifiers())) {
+                    fields.add(root.get(field.getName()));
+                }
+            }
+
+            criteria.multiselect(fields);
+
+            return new JoinBuilder<>(entityClass, session, criteriaBuilder, criteria, root);
         } catch (Exception e) {
             throw new DatabaseException("Error when trying to get count of entities from database", e);
         }

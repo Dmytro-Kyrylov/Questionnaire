@@ -92,4 +92,9 @@ public final class QueryConfigurator<T extends IEntity, L extends Serializable> 
     protected Session getSession() {
         return super.getSession();
     }
+
+    @Override
+    protected boolean isReadonly() {
+        return super.isReadonly();
+    }
 }

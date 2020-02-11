@@ -171,6 +171,8 @@ public final class DaoManager {
                 query.setMaxResults(queryConfigurator.getLimit());
             }
 
+            query.setReadOnly(queryConfigurator.isReadonly());
+
             return query.getResultList();
         } catch (Exception e) {
             throw new DatabaseException("Error when trying to load entities from database", e);

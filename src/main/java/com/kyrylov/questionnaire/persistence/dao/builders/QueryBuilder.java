@@ -26,6 +26,8 @@ import java.util.Map;
 @Setter(AccessLevel.PACKAGE)
 public abstract class QueryBuilder<T extends IEntity, L extends Serializable> {
 
+    private boolean readonly;
+
     private Predicate predicate;
     private List<Order> orders;
     private Map<String, From<? extends IEntity, ? extends IEntity>> fromMap;
@@ -70,6 +72,11 @@ public abstract class QueryBuilder<T extends IEntity, L extends Serializable> {
         this.entityClass = tClass;
         this.criteriaQuery = criteria;
         this.session = session;
+    }
+
+    public QueryBuilder<T, L> readonly() {
+        setReadonly(true);
+        return this;
     }
 
     /**

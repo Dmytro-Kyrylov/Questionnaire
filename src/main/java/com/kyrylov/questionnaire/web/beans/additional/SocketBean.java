@@ -21,6 +21,7 @@ public class SocketBean implements Serializable {
 
     private static final long serialVersionUID = -2420219156541908659L;
 
+    @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
     @Getter(AccessLevel.PRIVATE)
     @Inject
     @Push(channel = "response_table")

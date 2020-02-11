@@ -66,8 +66,9 @@ public class QuestionnaireBean extends BasePageBean {
         this.multipleOptionsForResponseData = new HashMap<>();
         this.singleOptionsForResponseData = new HashMap<>();
         this.fieldUploadedFiles = new HashMap<>();
+
         try {
-            this.fields = DaoManager.select(Field.class).where().equal(Field_.ACTIVE, Boolean.TRUE).list();
+            this.fields = DaoManager.select(Field.class).where().equal(Field_.ACTIVE, Boolean.TRUE).readonly().list();
         } catch (DatabaseException e) {
             log.error(e.getMessage(), e);
             displayErrorMessageWithUserLocale("questionnaireBeanErrorOnPageInit");

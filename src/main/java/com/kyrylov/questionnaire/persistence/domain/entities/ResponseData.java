@@ -25,9 +25,11 @@ public class ResponseData implements IEntity {
 
         private static final long serialVersionUID = 649062580411926903L;
 
+        @SuppressWarnings("JpaDataSourceORMInspection")
         @Column(name = "field_id")
         private Long fieldId;
 
+        @SuppressWarnings("JpaDataSourceORMInspection")
         @Column(name = "response_id")
         private Long responseId;
 
@@ -67,7 +69,7 @@ public class ResponseData implements IEntity {
     @Column(name = "date_data")
     private Date date;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "document_id")
     private Document document;
 

@@ -57,7 +57,7 @@ public class XlsResponseFileCreator extends XlsFileCreator {
             row.createCell(cellNum++).setCellValue(response.getDate().toString());
 
             List<ResponseData> responseDataList = response.getResponseDataList();
-            for (Field field : fields) {
+            for (Field field : getFields()) {
                 ResponseData responseData = responseDataList.stream().filter(rd -> rd.getField().equals(field))
                         .findAny().orElse(null);
                 if (responseData != null) {

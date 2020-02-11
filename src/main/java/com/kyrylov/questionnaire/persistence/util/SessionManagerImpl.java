@@ -8,25 +8,30 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 class SessionManagerImpl implements SessionManager {
 
-    SessionManagerImpl() {
-
-    }
+    private static SessionHolder applicationSessionHolder;
 
     /**
-     * Search sessionHolder in httpSession of current user and return it if exist, if not - create it
-     * If there is no session, then return new instance of holder
+     * Search sessionHolder in httpSession of current user and return it if exist, if not - create static holder for application
      *
-     * @return session holder if exist or new
+     * @return session holder {@link SessionHolder}
      */
     @Override
     public SessionHolder getSessionHolder() {
         if (FacesContext.getCurrentInstance() == null) {
-            log.info("No FacesContext. Create new SessionHolder");
-            return new SessionHolder();
+            log.warn("No FacesContext. Create new SessionHolder");
+            if (applicationSessionHolder == null) {
+                applicationSessionHolder = new SessionHolder();
+            }
+            return applicationSessionHolder;
         }
         HttpServletRequest request = (HttpServletRequest) FacesContext
                 .getCurrentInstance().getExternalContext().getRequest();
         return (SessionHolder) request.getAttribute(SessionHolder.HIBERNATE_SESSION_ATTRIBUTE);
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        applicationSessionHolder.closeSession();
+    }
 }

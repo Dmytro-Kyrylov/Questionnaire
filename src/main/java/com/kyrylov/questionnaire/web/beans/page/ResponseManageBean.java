@@ -42,7 +42,7 @@ public class ResponseManageBean extends BaseLazyEntityModelBean<Response> {
     public void updateResponseTable() {
         try {
             loadList(Response.class, x -> x.leftJoin(Response_.USER, "u"), x -> x, x -> x);
-            this.fields = DaoManager.select(Field.class).list();
+            this.fields = DaoManager.select(Field.class).readonly().list();
         } catch (DatabaseException e) {
             log.error(e.getMessage(), e);
             displayErrorMessageWithUserLocale("responseManageBeanErrorOnPageInit");
@@ -116,7 +116,7 @@ public class ResponseManageBean extends BaseLazyEntityModelBean<Response> {
         byte[] content;
         try {
             content = new XlsResponseFileCreator(getUserBean().getUserLocale(),
-                    DaoManager.select(Response.class).list(), getFields()).createXls();
+                    DaoManager.select(Response.class).readonly().list(), getFields()).createXls();
         } catch (Exception e) {
             log.error("Error on generating response xls - " + e.getMessage(), e);
             displayErrorMessageWithUserLocale("responseManageBeanErrorGeneratingXLS");
@@ -131,7 +131,7 @@ public class ResponseManageBean extends BaseLazyEntityModelBean<Response> {
         byte[] content;
         try {
             content = new XmlResponseFileCreator(getUserBean().getUserLocale(),
-                    DaoManager.select(Response.class).list()).createFile();
+                    DaoManager.select(Response.class).readonly().list()).createFile();
         } catch (Exception e) {
             log.error("Error on generating response xml - " + e.getMessage(), e);
             displayErrorMessageWithUserLocale("responseManageBeanErrorGeneratingXML");

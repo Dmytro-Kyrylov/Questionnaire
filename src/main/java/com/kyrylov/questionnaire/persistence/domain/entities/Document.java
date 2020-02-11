@@ -20,7 +20,7 @@ public class Document extends IndexedEntity {
     @Column(name = "file_path")
     private String filePath;
 
-    @OneToOne(mappedBy = "document")
+    @OneToOne(mappedBy = "document", fetch = FetchType.LAZY)
     private ResponseData responseData;
 
     @Transient

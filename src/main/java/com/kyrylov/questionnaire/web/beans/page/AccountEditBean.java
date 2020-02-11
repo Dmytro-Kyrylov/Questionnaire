@@ -3,7 +3,6 @@ package com.kyrylov.questionnaire.web.beans.page;
 import com.kyrylov.questionnaire.persistence.dao.DaoManager;
 import com.kyrylov.questionnaire.persistence.domain.entities.User;
 import com.kyrylov.questionnaire.persistence.domain.entities.UserRole;
-import com.kyrylov.questionnaire.persistence.domain.entities.User_;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import com.kyrylov.questionnaire.util.dto.UserDto;
 import com.kyrylov.questionnaire.util.helpers.EmailHelper;
@@ -60,7 +59,7 @@ public class AccountEditBean extends BasePageBean {
             DaoManager.beginTransaction();
 
             if (!getPageUser().getEmail().equals(user.getEmail())) {
-                user.setActivationKey(UserActivationHelper.generateActivationKey(user.getEmail()));
+                user.setActivationKey(UserActivationHelper.generateActivationKey(getPageUser().getEmail()));
                 user.setActive(false);
                 user.getRoles().removeIf(r -> r.getRole().equals(UserRole.RoleEnum.ROLE_ADMIN));
             }

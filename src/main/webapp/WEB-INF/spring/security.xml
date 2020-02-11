@@ -29,13 +29,14 @@
         <sec:headers>
             <sec:frame-options policy="SAMEORIGIN"/>
         </sec:headers>
-<!--todo-->
+
         <sec:form-login login-page="/Server/User/authorization.xhtml" login-processing-url="/j_spring_security_check"
                         authentication-failure-url="/Server/User/authorization.xhtml?authenticationFailed=true"
                         default-target-url="/questionnaire.xhtml" always-use-default-target="true"
                         username-parameter="j_username" password-parameter="j_password"
                         authentication-success-handler-ref="authenticationSuccessHandler"/>
-        <sec:remember-me key="uniqueAndSecret" remember-me-parameter="remember-me_input" token-validity-seconds="86400"/>
+        <sec:remember-me key="uniqueAndSecret" remember-me-parameter="remember-me_input"
+                         token-validity-seconds="86400"/>
 
         <sec:logout logout-success-url="/" invalidate-session="true" logout-url="/logout"/>
 

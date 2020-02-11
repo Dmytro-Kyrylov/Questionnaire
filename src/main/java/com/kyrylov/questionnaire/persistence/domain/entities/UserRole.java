@@ -1,8 +1,6 @@
 package com.kyrylov.questionnaire.persistence.domain.entities;
 
-import com.kyrylov.questionnaire.persistence.dao.DaoManager;
 import com.kyrylov.questionnaire.persistence.domain.IndexedEntity;
-import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

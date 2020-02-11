@@ -32,9 +32,7 @@ public class Field extends IndexedEntity {
         FILE;
 
         public boolean isOptionsType() {
-            return this.equals(FieldType.CHECKBOX)
-                    || this.equals(FieldType.RADIO_BUTTON)
-                    || this.equals(FieldType.COMBOBOX);
+            return this.isMultiOptionsType() || this.isSingleOptionType();
         }
 
         public boolean isMultiOptionsType() {

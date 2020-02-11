@@ -19,7 +19,7 @@ public class Response extends IndexedEntity {
 
     private static final long serialVersionUID = 5017820422310490908L;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

@@ -20,20 +20,21 @@
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeSINGLE_LINE_TEXT}">
                         <p:inputText value="#{questionnaireBean.fieldValues.get(field).text}"
-                                     required="#{field.required}" maxlength="255"
+                                     required="#{field.required}" maxlength="255" styleClass="auto-width"
                                      requiredMessage="#{valid.valueIsRequired}"/>
                         <p:message for="@previous" display="text"/>
                     </p:outputPanel>
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeMULTILINE_TEXT}">
                         <p:inputTextarea value="#{questionnaireBean.fieldValues.get(field).bigText}"
+                                         styleClass="auto-width"
                                          required="#{field.required}" requiredMessage="#{valid.valueIsRequired}"/>
                         <p:message for="@previous" display="text"/>
                     </p:outputPanel>
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeCHECKBOX}">
                         <p:selectManyCheckbox value="#{questionnaireBean.multipleOptionsForResponseData[field]}"
-                                              requiredMessage="#{valid.valueIsRequired}"
+                                              requiredMessage="#{valid.valueIsRequired}" styleClass="auto-width"
                                               converter="#{questionnaireBean.converter}" required="#{field.required}">
                             <f:selectItems value="#{questionnaireBean.getOptionList(field)}" var="option1"
                                            itemLabel="#{option1.label}"/>
@@ -43,7 +44,7 @@
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeRADIO_BUTTON}">
                         <p:selectOneRadio value="#{questionnaireBean.singleOptionsForResponseData[field]}"
-                                          requiredMessage="#{valid.valueIsRequired}"
+                                          requiredMessage="#{valid.valueIsRequired}" styleClass="auto-width"
                                           converter="#{questionnaireBean.converter}" required="#{field.required}">
                             <f:selectItems value="#{questionnaireBean.getOptionList(field)}" var="option2"
                                            itemLabel="#{option2.label}"/>
@@ -53,8 +54,9 @@
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeCOMBOBOX}">
                         <p:selectOneMenu value="#{questionnaireBean.singleOptionsForResponseData[field]}"
-                                         requiredMessage="#{valid.valueIsRequired}"
+                                         requiredMessage="#{valid.valueIsRequired}" styleClass="auto-width"
                                          converter="#{questionnaireBean.converter}" required="#{field.required}">
+                            <f:selectItem itemValue="#{null}" itemDisabled="#{field.required}"/>
                             <f:selectItems value="#{questionnaireBean.getOptionList(field)}" var="option3"
                                            itemLabel="#{option3.label}"/>
                         </p:selectOneMenu>
@@ -63,8 +65,10 @@
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeDATE}">
                         <p:datePicker value="#{questionnaireBean.fieldValues.get(field).date}"
-                                      requiredMessage="#{valid.valueIsRequired}"
-                                      required="#{field.required}" showIcon="true"/>
+                                      requiredMessage="#{valid.valueIsRequired}" pattern="dd-MM-yyyy"
+                                      monthNavigator="true" yearNavigator="true" yearRange="1900:2100"
+                                      required="#{field.required}" showIcon="true"
+                                      converterMessage="#{valid.dateValueIncorrect}"/>
                         <p:message for="@previous" display="text"/>
                     </p:outputPanel>
 
@@ -92,6 +96,7 @@
                              disabled="#{empty questionnaireBean.fields}"/>
         </p:outputPanel>
 
+        <br/><br/><br/><br/>
     </ui:define>
 </ui:composition>
 </html>

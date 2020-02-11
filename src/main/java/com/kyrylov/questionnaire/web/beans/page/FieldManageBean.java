@@ -19,7 +19,6 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import javax.annotation.PostConstruct;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -52,7 +51,7 @@ public class FieldManageBean extends BaseLazyEntityModelBean<Field> {
         }
     }
 
-    public void openFieldDialogIfIdParameterExist(){
+    public void openFieldDialogIfIdParameterExist() {
         String fieldId = getHttpServletRequest().getParameter(RedirectHelper.Parameter.ID_OF_ENTITY.getParameter());
         if (fieldId != null && !fieldId.isEmpty()) {
             openFieldDialog(fieldId);
@@ -102,7 +101,7 @@ public class FieldManageBean extends BaseLazyEntityModelBean<Field> {
     public StreamedContent downloadXmlRepresentationOfTable() {
         byte[] content;
         try {
-            content = new XmlFieldFileCreator(getUserBean().getUserLocale(), DaoManager.select(Field.class).list())
+            content = new XmlFieldFileCreator(getUserBean().getUserLocale(), DaoManager.select(Field.class).readonly().list())
                     .createFile();
         } catch (Exception e) {
             log.error("Error on generating field xml - " + e.getMessage(), e);
@@ -117,7 +116,7 @@ public class FieldManageBean extends BaseLazyEntityModelBean<Field> {
     public StreamedContent downloadXlsRepresentationOfTable() {
         byte[] content;
         try {
-            content = new XlsFieldFileCreator(getUserBean().getUserLocale(), DaoManager.select(Field.class).list())
+            content = new XlsFieldFileCreator(getUserBean().getUserLocale(), DaoManager.select(Field.class).readonly().list())
                     .createXls();
         } catch (Exception e) {
             log.error("Error on generating field xls - " + e.getMessage(), e);

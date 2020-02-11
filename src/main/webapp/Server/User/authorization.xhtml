@@ -42,7 +42,7 @@
                 </p:panelGrid>
             </p:outputPanel>
 
-            <p:outputPanel style="display: flex" styleClass="panel-center-of-page" id="signUpSection"
+            <p:outputPanel styleClass="panel-center-of-page" id="signUpSection"
                            rendered="#{not authorizationBean.showLogInSection}">
                 <p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group">
                     <h:outputText styleClass="header3" value="#{msg.authorizationSignUpSectionHeader}"/>
@@ -104,8 +104,10 @@
                     </p:outputPanel>
                 </p:panelGrid>
             </p:outputPanel>
-            <h:outputText rendered="#{not empty param['authenticationFailed']}"
-                          value="#{msg.authorizationAuthenticationFailed}" styleClass="red"/>
+            <p:outputPanel styleClass="panel-center-of-page">
+                <h:outputText rendered="#{not empty param['authenticationFailed']}"
+                              value="#{msg.authorizationAuthenticationFailed}" styleClass="red"/>
+            </p:outputPanel>
         </p:outputPanel>
     </ui:define>
 </ui:composition>

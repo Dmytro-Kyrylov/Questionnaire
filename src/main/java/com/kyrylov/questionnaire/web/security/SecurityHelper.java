@@ -4,6 +4,7 @@ import com.kyrylov.questionnaire.persistence.domain.entities.User;
 import com.kyrylov.questionnaire.util.dto.UserDto;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class SecurityHelper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class SecurityHelper {
 
     @Getter(AccessLevel.PRIVATE)
     public enum SpringSecurityAction {

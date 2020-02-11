@@ -17,7 +17,7 @@ import java.util.Locale;
 @Getter(AccessLevel.PRIVATE)
 abstract class XmlFileCreator extends BaseFileCreator {
 
-    public XmlFileCreator(Locale locale) {
+    protected XmlFileCreator(Locale locale) {
         super(locale);
     }
 

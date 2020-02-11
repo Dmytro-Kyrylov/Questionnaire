@@ -8,6 +8,8 @@ import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import com.kyrylov.questionnaire.persistence.util.HibernateUtil;
 import com.kyrylov.questionnaire.persistence.util.SessionManager;
 import com.kyrylov.questionnaire.util.dto.IDto;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -28,6 +30,7 @@ import java.util.List;
  *
  * @author Dmitrii
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public final class DaoManager {
 

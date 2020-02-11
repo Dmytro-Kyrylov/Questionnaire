@@ -2,7 +2,9 @@ package com.kyrylov.questionnaire.util.helpers;
 
 import com.kyrylov.questionnaire.util.TypeOfLocale;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -17,78 +19,11 @@ import java.util.ResourceBundle;
  *
  * @author Dmitrii
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
-public class ResourceHelper {
+public final class ResourceHelper {
 
     private static final Locale DEFAULT_APPLICATION_LOCALE;
-
-    /**
-     * All primary resources data in enum representation
-     *
-     * @author Dmitrii
-     */
-    @Getter(AccessLevel.PRIVATE)
-    public enum ResourceProperties {
-        PROJECT_PROPERTIES("project.properties"),
-        EMAIL_PROPERTIES("email.properties");
-
-        private interface PropertiesHandler {
-            String getValue();
-        }
-
-        public enum EmailProperties implements PropertiesHandler {
-            SMTPS_USER("mail.smtps.user"),
-            SMTPS_PASSWORD("mail.smtps.password");
-
-            private String value;
-
-            EmailProperties(String value) {
-                this.value = value;
-            }
-
-            @Override
-            public String getValue() {
-                return this.value;
-            }
-        }
-
-        public enum ProjectProperties implements PropertiesHandler {
-            DEFAULT_APPLICATION_LOCALE("defaultLocale"),
-            QUESTIONNAIRE_FILE_SAVE_PATH("questionnaireFileSavePath"),
-            SESSION_MANAGER_CLASS("com.kyrylov.questionnaire.persistence.util.SessionManager");
-
-            private String value;
-
-            ProjectProperties(String value) {
-                this.value = value;
-            }
-
-            @Override
-            public String getValue() {
-                return this.value;
-            }
-        }
-
-        private String fileName;
-
-        ResourceProperties(String fileName) {
-            this.fileName = fileName;
-        }
-    }
-
-    @Getter
-    public static class PropertiesWrapper {
-
-        private Properties properties;
-
-        PropertiesWrapper(Properties properties) {
-            this.properties = properties;
-        }
-
-        public String getProperty(ResourceProperties.PropertiesHandler property) {
-            return this.properties.getProperty(property.getValue());
-        }
-    }
 
     static {
         String applicationLocale = null;
@@ -145,5 +80,61 @@ public class ResourceHelper {
             loader = ClassLoader.getSystemClassLoader();
         }
         return loader;
+    }
+
+    /**
+     * All primary resources data in enum representation
+     *
+     * @author Dmitrii
+     */
+    @AllArgsConstructor
+    @Getter(AccessLevel.PRIVATE)
+    public enum ResourceProperties {
+        PROJECT_PROPERTIES("project.properties"),
+        EMAIL_PROPERTIES("email.properties");
+
+        private String fileName;
+
+        private interface PropertiesHandler {
+            String getValue();
+        }
+
+        @AllArgsConstructor
+        public enum EmailProperties implements PropertiesHandler {
+            SMTPS_USER("mail.smtps.user"),
+            SMTPS_PASSWORD("mail.smtps.password");
+
+            private String value;
+
+            @Override
+            public String getValue() {
+                return this.value;
+            }
+        }
+
+        @AllArgsConstructor
+        public enum ProjectProperties implements PropertiesHandler {
+            DEFAULT_APPLICATION_LOCALE("defaultLocale"),
+            QUESTIONNAIRE_FILE_SAVE_PATH("questionnaireFileSavePath"),
+            SESSION_MANAGER_CLASS("com.kyrylov.questionnaire.persistence.util.SessionManager");
+
+            private String value;
+
+            @Override
+            public String getValue() {
+                return this.value;
+            }
+        }
+    }
+
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @Getter
+    public static class PropertiesWrapper {
+
+        private Properties properties;
+
+        public String getProperty(ResourceProperties.PropertiesHandler property) {
+            return this.properties.getProperty(property.getValue());
+        }
     }
 }

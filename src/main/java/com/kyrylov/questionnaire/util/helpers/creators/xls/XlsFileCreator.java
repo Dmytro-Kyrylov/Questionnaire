@@ -16,7 +16,7 @@ import java.util.Locale;
 @Getter(AccessLevel.PRIVATE)
 abstract class XlsFileCreator extends BaseFileCreator {
 
-    public XlsFileCreator(Locale locale) {
+    protected XlsFileCreator(Locale locale) {
         super(locale);
     }
 

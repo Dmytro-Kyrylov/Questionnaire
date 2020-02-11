@@ -1,14 +1,17 @@
 package com.kyrylov.questionnaire.web.util.helpers;
 
 import com.kyrylov.questionnaire.web.util.Page;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.faces.context.FacesContext;
 import java.io.IOException;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
-public class RedirectHelper {
+public final class RedirectHelper {
 
     @Getter
     public enum Parameter {

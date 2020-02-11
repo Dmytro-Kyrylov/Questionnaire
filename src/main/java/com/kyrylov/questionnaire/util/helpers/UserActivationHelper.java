@@ -8,6 +8,8 @@ import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import com.kyrylov.questionnaire.util.helpers.entities.UserHelper;
 import com.kyrylov.questionnaire.web.util.Page;
 import com.kyrylov.questionnaire.web.util.helpers.RedirectHelper;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.faces.context.FacesContext;
@@ -16,8 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Locale;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
-public class UserActivationHelper {
+public final class UserActivationHelper {
 
     /**
      * Activate user account

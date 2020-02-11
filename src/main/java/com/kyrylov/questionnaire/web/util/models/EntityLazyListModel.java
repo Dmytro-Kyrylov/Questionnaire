@@ -76,9 +76,9 @@ public class EntityLazyListModel<T extends IndexedEntity> extends LazyDataModel<
                                                      SortOrder sortOrder, Map<String, Object> filters)
             throws DatabaseException {
         try {
-            joinBuilder = getJoinsFunc().apply(joinBuilder);
+            JoinBuilder<T, ?> jBuilder = getJoinsFunc().apply(joinBuilder);
 
-            ConditionBuilder<T, ?> conditionBuilder = getRestrictionsFunc().apply(joinBuilder.where());
+            ConditionBuilder<T, ?> conditionBuilder = getRestrictionsFunc().apply(jBuilder.where());
             addMoreRestrictions(conditionBuilder, filters);
 
             OrderBuilder<T, ?> orderBuilder = getOrdersFunc().apply(conditionBuilder.orderBy());
@@ -246,8 +246,7 @@ public class EntityLazyListModel<T extends IndexedEntity> extends LazyDataModel<
             return false;
         }
 
-        int rowIndex = getRowIndex();
-        return rowIndex >= 0 && rowIndex < getList().size();
+        return getRowIndex() >= 0 && getRowIndex() < getList().size();
     }
 
     public int getRowCount() {

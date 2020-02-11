@@ -18,7 +18,7 @@
     </beans:bean>
 
     <beans:bean id="accessDeniedHandler"
-                class="com.kyrylov.questionnaire.web.security.AccessDeniedHandler">
+                class="com.kyrylov.questionnaire.web.security.AccessDeniedHandlerImpl">
     </beans:bean>
 
     <sec:http auto-config="true" use-expressions="true">

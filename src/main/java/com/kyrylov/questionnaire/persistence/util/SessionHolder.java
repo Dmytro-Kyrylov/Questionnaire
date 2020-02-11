@@ -47,6 +47,7 @@ public class SessionHolder {
 
     @Override
     protected void finalize() throws Throwable {
+        super.finalize();
         try {
             this.closeSession();
         } catch (HibernateException e) {

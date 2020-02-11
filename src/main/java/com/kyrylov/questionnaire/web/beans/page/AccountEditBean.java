@@ -34,7 +34,11 @@ public class AccountEditBean extends BasePageBean {
 
     @PostConstruct
     private void init() {
-        setPageUser(getUserBean().getUser().clone());
+        try {
+            setPageUser(getUserBean().getUser().clone());
+        } catch (CloneNotSupportedException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     /**

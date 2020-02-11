@@ -1,6 +1,8 @@
 package com.kyrylov.questionnaire.persistence.util;
 
 import com.kyrylov.questionnaire.util.helpers.ResourceHelper;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -17,6 +19,7 @@ import java.util.Set;
  *
  * @author Dmitrii
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public class HibernateUtil {
 
@@ -52,7 +55,7 @@ public class HibernateUtil {
         }
     }
 
-    synchronized static SessionFactory getSessionFactoryInstance() {
+    static synchronized SessionFactory getSessionFactoryInstance() {
         if (sessionFactory == null) {
             sessionFactory = buildSessionFactory();
         }
@@ -64,7 +67,7 @@ public class HibernateUtil {
      *
      * @return implementation of SessionManager interface{@link SessionManager}
      */
-    public static SessionManager getSessionManager() {
+    public static synchronized SessionManager getSessionManager() {
         if (sessionManager == null) {
             try {
                 Class sessionManagerImplClass = Class.forName(
@@ -80,6 +83,7 @@ public class HibernateUtil {
 
     @Override
     protected void finalize() throws Throwable {
+        super.finalize();
         sessionFactory.close();
     }
 }

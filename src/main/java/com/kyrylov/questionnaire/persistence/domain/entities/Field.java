@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = false, exclude = {"responseDataList", "options"})
+@EqualsAndHashCode(callSuper = true, exclude = {"responseDataList", "options"})
 @Data
 @javax.persistence.Entity
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

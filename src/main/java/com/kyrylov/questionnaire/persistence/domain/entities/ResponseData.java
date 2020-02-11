@@ -1,7 +1,10 @@
 package com.kyrylov.questionnaire.persistence.domain.entities;
 
 import com.kyrylov.questionnaire.persistence.domain.interfaces.IEntity;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
@@ -12,38 +15,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
+@NoArgsConstructor
 @Entity
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "response_data")
 public class ResponseData implements IEntity {
 
     private static final long serialVersionUID = -4429962591671973629L;
-
-    @Data
-    @Embeddable
-    static class ResponseDataIdentifier implements Serializable {
-
-        private static final long serialVersionUID = 649062580411926903L;
-
-        @SuppressWarnings("JpaDataSourceORMInspection")
-        @Column(name = "field_id")
-        private Long fieldId;
-
-        @SuppressWarnings("JpaDataSourceORMInspection")
-        @Column(name = "response_id")
-        private Long responseId;
-
-        public ResponseDataIdentifier() {
-        }
-
-        private ResponseDataIdentifier(Long fieldId, Long responseId) {
-            this.fieldId = fieldId;
-            this.responseId = responseId;
-        }
-    }
-
-    public ResponseData() {
-    }
 
     public ResponseData(Field field, Response response) {
         initResponseData(field, response);
@@ -112,6 +90,23 @@ public class ResponseData implements IEntity {
             default:
                 return "";
         }
+    }
+
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor
+    @Data
+    @Embeddable
+    static class ResponseDataIdentifier implements Serializable {
+
+        private static final long serialVersionUID = 649062580411926903L;
+
+        @SuppressWarnings("JpaDataSourceORMInspection")
+        @Column(name = "field_id")
+        private Long fieldId;
+
+        @SuppressWarnings("JpaDataSourceORMInspection")
+        @Column(name = "response_id")
+        private Long responseId;
     }
 
 }

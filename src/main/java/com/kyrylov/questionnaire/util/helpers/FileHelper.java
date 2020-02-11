@@ -1,6 +1,8 @@
 package com.kyrylov.questionnaire.util.helpers;
 
 import com.kyrylov.questionnaire.persistence.domain.entities.Document;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -13,8 +15,9 @@ import java.io.IOException;
  *
  * @author Dmitrii
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
-public class FileHelper {
+public final class FileHelper {
 
     /**
      * Create folder according passed folders sequence, save new file to server and return its path

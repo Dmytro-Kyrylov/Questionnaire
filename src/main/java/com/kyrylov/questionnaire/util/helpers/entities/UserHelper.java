@@ -6,6 +6,8 @@ import com.kyrylov.questionnaire.persistence.domain.entities.UserRole;
 import com.kyrylov.questionnaire.persistence.domain.entities.UserRole_;
 import com.kyrylov.questionnaire.persistence.domain.entities.User_;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Contains business methods to work with User entity
@@ -13,7 +15,8 @@ import com.kyrylov.questionnaire.persistence.util.DatabaseException;
  *
  * @author Dmitrii
  */
-public class UserHelper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class UserHelper {
 
     /**
      * Allows you to find out if a passed email has been registered on any user

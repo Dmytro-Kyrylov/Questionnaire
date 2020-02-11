@@ -24,6 +24,6 @@ public class Document extends IndexedEntity {
     private ResponseData responseData;
 
     @Transient
-    private byte[] content;
+    private transient byte[] content;
 
 }

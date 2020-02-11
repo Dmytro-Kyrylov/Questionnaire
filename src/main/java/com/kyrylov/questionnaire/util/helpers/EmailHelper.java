@@ -1,5 +1,8 @@
 package com.kyrylov.questionnaire.util.helpers;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -8,7 +11,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 
-public class EmailHelper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class EmailHelper {
 
     /**
      * Send message to passed email using email declared in project.properties

@@ -1,9 +1,13 @@
 package com.kyrylov.questionnaire.web.util.helpers;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class DialogHelper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class DialogHelper {
 
     //enums.properties
     public enum DialogResult {

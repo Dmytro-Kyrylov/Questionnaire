@@ -36,6 +36,8 @@ import java.util.Map;
 public class FieldManageBean extends BaseLazyEntityModelBean<Field> {
 
     private static final long serialVersionUID = 1581953714944406695L;
+    private static final int WIDTH_OF_FIELD_DIALOG_PX = 700;
+    private static final int HEIGHT_OF_FIELD_DIALOG_PX = 430;
 
     @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
     @Inject
@@ -66,7 +68,8 @@ public class FieldManageBean extends BaseLazyEntityModelBean<Field> {
                     Collections.singletonList(fieldId));
         }
         PrimeFaces.current().dialog().openDynamic("Dialog/field",
-                DialogHelper.getDialogOptions(true, false, false, 700, 430),
+                DialogHelper.getDialogOptions(true, false, false,
+                        WIDTH_OF_FIELD_DIALOG_PX, HEIGHT_OF_FIELD_DIALOG_PX),
                 params);
     }
 

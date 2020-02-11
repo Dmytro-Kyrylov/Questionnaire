@@ -31,17 +31,8 @@ public class UserDto implements IDto, Cloneable {
                 user.getPassword(), user.getActive(), user.getActivationKey());
     }
 
-    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
-    public UserDto clone() {
-        UserDto userDto = new UserDto();
-        userDto.setFirstName(this.getFirstName());
-        userDto.setLastName(this.getLastName());
-        userDto.setEmail(this.getEmail());
-        userDto.setPassword(this.getPassword());
-        userDto.setPhone(this.getPhone());
-        userDto.setActive(this.getActive());
-        userDto.setActivationKey(this.getActivationKey());
-        return userDto;
+    public UserDto clone() throws CloneNotSupportedException {
+        return (UserDto) super.clone();
     }
 }

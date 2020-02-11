@@ -27,28 +27,6 @@ import java.util.Stack;
  */
 public class ConditionBuilder<T extends IEntity, L extends Serializable> extends QueryBuilder<T, L> {
 
-    private enum Operator {
-        OR, AND
-    }
-
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
-    private static class Tuple {
-        private ConditionBuilder.Operator operator;
-        private Predicate predicate;
-        private boolean notOperator;
-
-        private Tuple(ConditionBuilder.Operator operator, Predicate predicate, boolean notOperator) {
-            this.operator = operator;
-            this.predicate = predicate;
-        }
-
-        private Tuple(Operator operator, Predicate predicate) {
-            this.operator = operator;
-            this.predicate = predicate;
-        }
-    }
-
     private Stack<Tuple> predicates;
 
     ConditionBuilder(QueryBuilder<T, L> queryBuilder) {
@@ -231,5 +209,27 @@ public class ConditionBuilder<T extends IEntity, L extends Serializable> extends
     public L singleResult() throws DatabaseException {
         this.setPredicate(getResultPredicate());
         return super.singleResult();
+    }
+
+    private enum Operator {
+        OR, AND
+    }
+
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
+    private static final class Tuple {
+        private ConditionBuilder.Operator operator;
+        private Predicate predicate;
+        private boolean notOperator;
+
+        private Tuple(ConditionBuilder.Operator operator, Predicate predicate, boolean notOperator) {
+            this.operator = operator;
+            this.predicate = predicate;
+        }
+
+        private Tuple(Operator operator, Predicate predicate) {
+            this.operator = operator;
+            this.predicate = predicate;
+        }
     }
 }

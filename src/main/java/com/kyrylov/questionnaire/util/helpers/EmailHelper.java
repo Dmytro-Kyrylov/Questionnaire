@@ -27,7 +27,7 @@ public final class EmailHelper {
         String fromEmail = properties.getProperty(ResourceHelper.ResourceProperties.EmailProperties.SMTPS_USER);
         String password = properties.getProperty(ResourceHelper.ResourceProperties.EmailProperties.SMTPS_PASSWORD);
 
-        Session session = Session.getDefaultInstance(properties.getProperties());
+        Session session = Session.getInstance(properties.getProperties());
         MimeMessage mimeMessage = new MimeMessage(session);
         try {
             mimeMessage.setFrom(new InternetAddress(fromEmail));

@@ -9,7 +9,11 @@ import lombok.Setter;
 import org.hibernate.Session;
 import org.hibernate.query.criteria.internal.path.AbstractJoinImpl;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.From;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;

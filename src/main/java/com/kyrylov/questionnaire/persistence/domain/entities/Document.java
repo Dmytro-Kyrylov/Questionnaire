@@ -4,7 +4,12 @@ import com.kyrylov.questionnaire.persistence.domain.IndexedEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

@@ -1,7 +1,11 @@
 package com.kyrylov.questionnaire.web.beans.page;
 
 import com.kyrylov.questionnaire.persistence.dao.DaoManager;
-import com.kyrylov.questionnaire.persistence.domain.entities.*;
+import com.kyrylov.questionnaire.persistence.domain.entities.Document;
+import com.kyrylov.questionnaire.persistence.domain.entities.Field;
+import com.kyrylov.questionnaire.persistence.domain.entities.Response;
+import com.kyrylov.questionnaire.persistence.domain.entities.ResponseData;
+import com.kyrylov.questionnaire.persistence.domain.entities.Response_;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import com.kyrylov.questionnaire.util.helpers.FileHelper;
 import com.kyrylov.questionnaire.util.helpers.ResourceHelper;

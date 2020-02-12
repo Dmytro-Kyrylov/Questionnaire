@@ -3,7 +3,11 @@ package com.kyrylov.questionnaire.persistence.domain;
 import com.kyrylov.questionnaire.persistence.domain.interfaces.IEntity;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
 @Data
 @MappedSuperclass

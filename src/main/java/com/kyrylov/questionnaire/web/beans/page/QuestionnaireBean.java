@@ -1,7 +1,13 @@
 package com.kyrylov.questionnaire.web.beans.page;
 
 import com.kyrylov.questionnaire.persistence.dao.DaoManager;
-import com.kyrylov.questionnaire.persistence.domain.entities.*;
+import com.kyrylov.questionnaire.persistence.domain.entities.Document;
+import com.kyrylov.questionnaire.persistence.domain.entities.Field;
+import com.kyrylov.questionnaire.persistence.domain.entities.Field_;
+import com.kyrylov.questionnaire.persistence.domain.entities.Option;
+import com.kyrylov.questionnaire.persistence.domain.entities.Response;
+import com.kyrylov.questionnaire.persistence.domain.entities.ResponseData;
+import com.kyrylov.questionnaire.persistence.domain.entities.User;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import com.kyrylov.questionnaire.util.helpers.FileHelper;
 import com.kyrylov.questionnaire.web.beans.BasePageBean;
@@ -20,7 +26,12 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter

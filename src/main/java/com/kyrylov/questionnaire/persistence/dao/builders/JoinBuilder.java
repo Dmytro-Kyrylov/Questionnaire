@@ -3,7 +3,12 @@ package com.kyrylov.questionnaire.persistence.dao.builders;
 import com.kyrylov.questionnaire.persistence.domain.interfaces.IEntity;
 import org.hibernate.Session;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.From;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
 
 /**

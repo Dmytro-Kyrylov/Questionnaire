@@ -45,7 +45,7 @@ public final class UserHelper {
             if (userRole == null) {
                 userRole = new UserRole();
                 userRole.setRole(roleEnum);
-                DaoManager.save(userRole, true);
+                DaoManager.save(userRole, !DaoManager.isTransactionInProgress());
             }
             return userRole;
         } catch (DatabaseException e) {

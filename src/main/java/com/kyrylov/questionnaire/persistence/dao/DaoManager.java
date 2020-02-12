@@ -377,4 +377,12 @@ public final class DaoManager {
         }
     }
 
+    public static boolean isTransactionInProgress() throws DatabaseException {
+        try {
+            return DaoManager.getSession().getTransaction().getStatus().equals(TransactionStatus.ACTIVE);
+        } catch (Exception e) {
+            throw new DatabaseException("Error when trying to get transaction status", e);
+        }
+    }
+
 }

@@ -13,14 +13,4 @@ abstract class JPAHibernateTest {
         DaoManager.getSession();
     }
 
-    @AfterAll
-    static void afterAll() {
-
-    }
-
-    @BeforeEach
-    void setUp() {
-
-    }
-
 }

@@ -1,7 +1,13 @@
 package com.kyrylov.questionnaire.persistence.dao;
 
-import com.kyrylov.questionnaire.persistence.domain.entities.*;
+import com.kyrylov.questionnaire.persistence.domain.entities.Field;
+import com.kyrylov.questionnaire.persistence.domain.entities.Field_;
+import com.kyrylov.questionnaire.persistence.domain.entities.Option;
+import com.kyrylov.questionnaire.persistence.domain.entities.Option_;
+import com.kyrylov.questionnaire.persistence.domain.entities.User;
+import com.kyrylov.questionnaire.persistence.domain.entities.User_;
 import com.kyrylov.questionnaire.persistence.util.DatabaseException;
+import com.kyrylov.questionnaire.util.dto.UserDto;
 import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -29,10 +35,8 @@ class DaoManagerTest extends JPAHibernateTest {
 
     @Test
     void testGetByField() throws DatabaseException {
-        User user = new User();
-        user.setEmail("test");
-        DaoManager.save(user, true);
-        Assertions.assertNotNull(user.getId(), "User was not saved");
+        User user = createUserWithEmail("testGetByField");
+
         DaoManager.getSession().evict(user);
         Assertions.assertFalse(DaoManager.getSession().contains(user), "User still in session");
         User userByField = DaoManager.getByField(User.class, User_.EMAIL, user.getEmail());
@@ -46,6 +50,48 @@ class DaoManagerTest extends JPAHibernateTest {
     void testBracketsException() {
         Assertions.assertThrows(DatabaseException.class, () -> DaoManager.select(Field.class).where().openBracket().list());
         Assertions.assertThrows(DatabaseException.class, () -> DaoManager.select(Field.class).where().closeBracket().list());
+    }
+
+    @Test
+    void dtoSelect() throws DatabaseException {
+        User user = createUserWithEmail("dtoSelect");
+
+        UserDto userDto = DaoManager.select(User.class, UserDto.class)
+                .where().equal(User_.EMAIL, user.getEmail()).readonly().singleResult();
+
+        Assertions.assertNotNull(userDto, "Dto was not created");
+        Assertions.assertEquals(user.getEmail(), userDto.getEmail(), "Emails are different");
+    }
+
+    @Test
+    void readonly() throws DatabaseException {
+        User user = createUserWithEmail("readonly");
+
+        DaoManager.getSession().evict(user);
+        Assertions.assertFalse(DaoManager.getSession().contains(user), "User still in session");
+
+        User user1 = DaoManager.select(User.class).readonly().singleResult();
+        Assertions.assertNotNull(user1, "User was not found");
+
+        user1.setEmail("test2");
+        DaoManager.save(user1, true);
+
+        DaoManager.getSession().evict(user1);
+        Assertions.assertFalse(DaoManager.getSession().contains(user1), "User still in session");
+
+        User user2 = DaoManager.get(User.class, user1.getId());
+        Assertions.assertNotNull(user2, "User was not found");
+
+        Assertions.assertEquals(user.getEmail(), user2.getEmail(), "Emails are not equal");
+        Assertions.assertNotEquals(user1.getEmail(), user2.getEmail(), "Emails are equal");
+    }
+
+    private User createUserWithEmail(String uniqueEmail) throws DatabaseException {
+        User user = new User();
+        user.setEmail(uniqueEmail);
+        DaoManager.save(user, true);
+        Assertions.assertNotNull(user.getId(), "User was not saved");
+        return user;
     }
 
     @Test

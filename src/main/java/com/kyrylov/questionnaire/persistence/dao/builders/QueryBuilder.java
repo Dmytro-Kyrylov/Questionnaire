@@ -69,6 +69,7 @@ public abstract class QueryBuilder<T extends IEntity, L extends Serializable> {
         this.fromMap = queryBuilder.getFromMap();
         this.predicate = queryBuilder.getPredicate();
         this.orders = queryBuilder.getOrders();
+        this.readonly = queryBuilder.isReadonly();
     }
 
     private void init(Class<T> tClass, Session session, CriteriaBuilder criteriaBuilder, CriteriaQuery<L> criteria, Root<T> root) {

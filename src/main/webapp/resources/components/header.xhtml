@@ -9,9 +9,9 @@
                 <p:menuitem value="#{msg.headerMenuActivationSendNewEmail}" action="#{userBean.sendNewActivationEmail}" update="messages"/>
             </p:submenu>
 
-            <p:menuitem url="#{facesContext.externalContext.requestContextPath}/Server/Sec/Management/fields.xhtml"
+            <p:menuitem rendered="#{userBean.user.active}" url="#{facesContext.externalContext.requestContextPath}/Server/Sec/Management/fields.xhtml"
                         value="#{msg.pageNameFieldManagement}"/>
-            <p:menuitem url="#{facesContext.externalContext.requestContextPath}/Server/Sec/Management/responses.xhtml"
+            <p:menuitem rendered="#{userBean.user.active}" url="#{facesContext.externalContext.requestContextPath}/Server/Sec/Management/responses.xhtml"
                         value="#{msg.pageNameResponseManagement}"/>
             <p:submenu label="#{userBean.user.firstName} #{userBean.user.lastName}">
                 <p:menuitem value="#{msg.pageNameAccountEdit}" url="#{facesContext.externalContext.requestContextPath}/Server/Sec/User/account_edit.xhtml"/>

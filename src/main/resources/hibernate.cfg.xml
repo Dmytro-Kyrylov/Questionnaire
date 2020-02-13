@@ -13,13 +13,13 @@
         <property name="hibernate.connection.autocommit">false</property>
 
         <property name="hibernate.hikari.dataSourceClassName">org.postgresql.ds.PGSimpleDataSource</property>
-        <property name="hibernate.hikari.dataSource.url">jdbc:postgresql://ec2-184-72-235-80.compute-1.amazonaws.com:5432/dapvipfovp2rcn</property>
-        <property name="hibernate.hikari.dataSource.user">yqyrjvlarsshcp</property>
-        <property name="hibernate.hikari.dataSource.password">de3ccfa762edd46eeacef0b8ecce87b99b7700628a875d3447c478a4b748b9c8</property>
+        <property name="hibernate.hikari.dataSource.url">jdbc:postgresql://localhost:5432/questionnaire</property>
+        <property name="hibernate.hikari.dataSource.user">postgres</property>
+        <property name="hibernate.hikari.dataSource.password">root</property>
         <property name="hibernate.hikari.autoCommit">false</property>
 
-        <property name="hibernate.hikari.minimumIdle">1</property>
-        <property name="hibernate.hikari.maximumPoolSize">20</property>
+        <property name="hibernate.hikari.minimumIdle">5</property>
+        <property name="hibernate.hikari.maximumPoolSize">10</property>
         <property name="hibernate.hikari.idleTimeout">30000</property>
 
         <!-- Second level cache. -->

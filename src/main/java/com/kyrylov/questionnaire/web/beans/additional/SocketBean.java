@@ -3,7 +3,7 @@ package com.kyrylov.questionnaire.web.beans.additional;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.push.Push;
 import javax.faces.push.PushContext;
 import javax.inject.Inject;
@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @author Dmitrii
  */
 @Named
-@RequestScoped
+@ApplicationScoped
 public class SocketBean implements Serializable {
 
     private static final long serialVersionUID = -2420219156541908659L;
@@ -27,7 +27,7 @@ public class SocketBean implements Serializable {
     @Push(channel = "response_table")
     private PushContext pushContext;
 
-    public void updateResponseTableByPushMessageInApplicationScope() {
+    public synchronized void updateResponseTableByPushMessageInApplicationScope() {
         getPushContext().send("updateResponseTable");
     }
 }

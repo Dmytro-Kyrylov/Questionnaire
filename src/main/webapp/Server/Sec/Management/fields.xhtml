@@ -15,6 +15,7 @@
         <p:outputPanel>
             <p:dataTable id="fieldsTable" var="field" value="#{fieldManageBean.lazyModel}" rows="10" lazy="true"
                          paginator="true" paginatorPosition="bottom" rowsPerPageTemplate="10, 20, 100"
+                         styleClass="word-wrap"
                          currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords}"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
                 <p:column headerText="#{msg.fieldManageLabel}" filterBy="#{field.label}">

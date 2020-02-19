@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true, exclude = "responseDataList")
@@ -30,5 +31,5 @@ public class Option extends IndexedEntity {
     private Field field;
 
     @ManyToMany(mappedBy = "selectedOptions", fetch = FetchType.LAZY)
-    private List<ResponseData> responseDataList;
+    private List<ResponseData> responseDataList = new ArrayList<>();
 }

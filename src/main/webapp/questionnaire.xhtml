@@ -19,21 +19,21 @@
                     </p:outputPanel>
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeSINGLE_LINE_TEXT}">
-                        <p:inputText value="#{questionnaireBean.fieldValues.get(field).text}"
+                        <p:inputText value="#{questionnaireBean.textForCorrespondingFields[field]}"
                                      required="#{field.required}" maxlength="255" styleClass="auto-width"
                                      requiredMessage="#{valid.valueIsRequired}"/>
                         <p:message for="@previous" display="text"/>
                     </p:outputPanel>
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeMULTILINE_TEXT}">
-                        <p:inputTextarea value="#{questionnaireBean.fieldValues.get(field).bigText}"
+                        <p:inputTextarea value="#{questionnaireBean.textForCorrespondingFields[field]}"
                                          styleClass="auto-width"
                                          required="#{field.required}" requiredMessage="#{valid.valueIsRequired}"/>
                         <p:message for="@previous" display="text"/>
                     </p:outputPanel>
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeCHECKBOX}">
-                        <p:selectManyCheckbox value="#{questionnaireBean.multipleOptionsForResponseData[field]}"
+                        <p:selectManyCheckbox value="#{questionnaireBean.multipleOptionsForCorrespondingFields[field]}"
                                               requiredMessage="#{valid.valueIsRequired}" styleClass="auto-width"
                                               converter="#{questionnaireBean.converter}" required="#{field.required}">
                             <f:selectItems value="#{questionnaireBean.getOptionList(field)}" var="option1"
@@ -43,7 +43,7 @@
                     </p:outputPanel>
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeRADIO_BUTTON}">
-                        <p:selectOneRadio value="#{questionnaireBean.singleOptionsForResponseData[field]}"
+                        <p:selectOneRadio value="#{questionnaireBean.singleOptionsForCorrespondingFields[field]}"
                                           requiredMessage="#{valid.valueIsRequired}" styleClass="auto-width"
                                           converter="#{questionnaireBean.converter}" required="#{field.required}">
                             <f:selectItems value="#{questionnaireBean.getOptionList(field)}" var="option2"
@@ -53,7 +53,7 @@
                     </p:outputPanel>
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeCOMBOBOX}">
-                        <p:selectOneMenu value="#{questionnaireBean.singleOptionsForResponseData[field]}"
+                        <p:selectOneMenu value="#{questionnaireBean.singleOptionsForCorrespondingFields[field]}"
                                          requiredMessage="#{valid.valueIsRequired}" styleClass="auto-width"
                                          converter="#{questionnaireBean.converter}" required="#{field.required}">
                             <f:selectItem itemValue="#{null}" itemDisabled="#{field.required}"/>
@@ -64,7 +64,7 @@
                     </p:outputPanel>
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeDATE}">
-                        <p:datePicker value="#{questionnaireBean.fieldValues.get(field).date}"
+                        <p:datePicker value="#{questionnaireBean.dateForCorrespondingFields[field]}"
                                       requiredMessage="#{valid.valueIsRequired}" pattern="dd-MM-yyyy"
                                       monthNavigator="true" yearNavigator="true" yearRange="1900:2100"
                                       required="#{field.required}" showIcon="true"
@@ -79,10 +79,10 @@
                             <f:attribute name="field" value="#{field}"/>
                         </p:fileUpload>
                         <p:inputText type="hidden" requiredMessage="#{valid.valueIsRequired}"
-                                     required="#{field.required and empty questionnaireBean.fieldUploadedFiles.get(field)}"/>
+                                     required="#{field.required and empty questionnaireBean.uploadedFilesForCorrespondingFields.get(field)}"/>
                         <p:message for="@previous" display="text"/>
                         <h:outputText id="fileName"
-                                      value="#{questionnaireBean.fieldUploadedFiles.get(field).fileName}"/>
+                                      value="#{questionnaireBean.uploadedFilesForCorrespondingFields.get(field).fileName}"/>
                     </p:outputPanel>
 
                     <br/>

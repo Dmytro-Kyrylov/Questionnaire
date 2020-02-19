@@ -12,11 +12,12 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter(AccessLevel.PRIVATE)
@@ -44,7 +45,7 @@ public class XlsResponseFileCreator extends XlsFileCreator {
 
         Row headerRow = sheet.createRow(0);
 
-        List<String> columns = new LinkedList<>(Arrays.asList(getResponsesColumns()));
+        List<String> columns = new ArrayList<>(Arrays.asList(getResponsesColumns()));
         columns.addAll(getFields().stream().map(Field::getLabel).collect(Collectors.toList()));
 
         createStandardHeader(headerCellStyle, headerRow, columns.toArray(new String[]{}));
@@ -92,12 +93,12 @@ public class XlsResponseFileCreator extends XlsFileCreator {
     }
 
     private int addOptionColumnAndGetLastRow(Sheet sheet, int rowNum, int cellNum, Row row, ResponseData responseData) {
-        List<Option> selectedOptions = responseData.getSelectedOptions();
+        Set<Option> selectedOptions = responseData.getSelectedOptions();
         Row rowForOption = row;
         int rowNumForOption = rowNum;
-        for (int i = 0; i < selectedOptions.size(); i++) {
-            Option option = selectedOptions.get(i);
-            if (i != 0) {
+        boolean firstRow = true;
+        for (Option option : selectedOptions) {
+            if (!firstRow) {
                 rowForOption = sheet.getRow(rowNumForOption);
                 if (rowForOption == null) {
                     rowForOption = sheet.createRow(rowNumForOption++);
@@ -106,6 +107,7 @@ public class XlsResponseFileCreator extends XlsFileCreator {
                 }
             }
             rowForOption.createCell(cellNum).setCellValue(option.getText());
+            firstRow = false;
         }
         return rowNumForOption - 1;
     }

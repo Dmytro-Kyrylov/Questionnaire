@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -49,34 +50,25 @@ public class QuestionnaireBean extends BasePageBean {
 
     private List<Field> fields;
 
-    /**
-     * Stores all entered on page values by field, except documents and options
-     */
-    private Map<Field, ResponseData> fieldValues;
+    private Map<Field, Date> dateForCorrespondingFields;
 
-    /**
-     * Stores all selected options in appropriate fields that allow to choose multiple options
-     */
-    private Map<Field, IndexedEntitySelectItem[]> multipleOptionsForResponseData;
+    private Map<Field, String> textForCorrespondingFields;
 
-    /**
-     * Stores all selected options in appropriate fields that allow to choose only one option
-     */
-    private Map<Field, IndexedEntitySelectItem> singleOptionsForResponseData;
+    private Map<Field, IndexedEntitySelectItem[]> multipleOptionsForCorrespondingFields;
+
+    private Map<Field, IndexedEntitySelectItem> singleOptionsForCorrespondingFields;
+
+    private Map<Field, Document> uploadedFilesForCorrespondingFields;
 
     private IndexedEntitySelectConverter<Option> converter;
 
-    /**
-     * Stores all uploaded files
-     */
-    private Map<Field, Document> fieldUploadedFiles;
-
     @PostConstruct
     private void init() {
-        this.fieldValues = new HashMap<>();
-        this.multipleOptionsForResponseData = new HashMap<>();
-        this.singleOptionsForResponseData = new HashMap<>();
-        this.fieldUploadedFiles = new HashMap<>();
+        this.dateForCorrespondingFields = new HashMap<>();
+        this.textForCorrespondingFields = new HashMap<>();
+        this.multipleOptionsForCorrespondingFields = new HashMap<>();
+        this.singleOptionsForCorrespondingFields = new HashMap<>();
+        this.uploadedFilesForCorrespondingFields = new HashMap<>();
 
         try {
             this.fields = DaoManager.select(Field.class).where().equal(Field_.ACTIVE, Boolean.TRUE).readonly().list();
@@ -85,17 +77,11 @@ public class QuestionnaireBean extends BasePageBean {
             displayErrorMessageWithUserLocale("questionnaireBeanErrorOnPageInit");
         }
 
-        for (Field field : this.fields) {
-            ResponseData responseData = new ResponseData();
-            this.fieldValues.put(field, responseData);
-            if (field.getType().isMultiOptionsType()) {
-                this.multipleOptionsForResponseData.put(field, new IndexedEntitySelectItem[field.getOptions().size()]);
-            } else if (field.getType().isSingleOptionType()) {
-                this.singleOptionsForResponseData.put(field, null);
-            }
-        }
-        List<Option> allOptionList = fields.stream().map(Field::getOptions).flatMap(List::stream)
-                .distinct().collect(Collectors.toList());
+        this.fields.stream().filter(f -> f.getType().isMultiOptionsType())
+                .forEach(f -> this.multipleOptionsForCorrespondingFields
+                        .put(f, new IndexedEntitySelectItem[f.getOptions().size()]));
+
+        Set<Option> allOptionList = fields.stream().map(Field::getOptions).flatMap(Set::stream).collect(Collectors.toSet());
         this.converter = new IndexedEntitySelectConverter<>(Option.class, allOptionList, Option::getText);
     }
 
@@ -113,18 +99,33 @@ public class QuestionnaireBean extends BasePageBean {
 
             DaoManager.beginTransaction();
             DaoManager.save(response);
-            for (Map.Entry<Field, ResponseData> fieldResponseDataEntry : getFieldValues().entrySet()) {
-                ResponseData responseData = fieldResponseDataEntry.getValue();
-                Field field = fieldResponseDataEntry.getKey();
+            for (Field field : getFields()) {
+                ResponseData responseData = new ResponseData(field, response);
 
-                responseData.initResponseData(field, response);
-
-                initResponseDataMultipleSelectedOptionList(responseData);
-                initResponseDataSingleSelectedOption(responseData);
-                initResponseDataDocument(responseData);
-
+                switch (field.getType()) {
+                    case SINGLE_LINE_TEXT:
+                        responseData.setText(getTextForCorrespondingFields().getOrDefault(field, null));
+                        break;
+                    case MULTILINE_TEXT:
+                        responseData.setBigText(getTextForCorrespondingFields().getOrDefault(field, null));
+                        break;
+                    case CHECKBOX:
+                        initResponseDataMultipleSelectedOptionList(responseData);
+                        break;
+                    case COMBOBOX:
+                    case RADIO_BUTTON:
+                        initResponseDataSingleSelectedOption(responseData);
+                        break;
+                    case DATE:
+                        responseData.setDate(getDateForCorrespondingFields().getOrDefault(field, null));
+                        break;
+                    case FILE:
+                        initResponseDataDocumentAndSaveFileToServer(responseData);
+                        break;
+                }
                 if (!responseData.isEmpty()) {
                     DaoManager.save(responseData);
+                    response.getResponseDataList().add(responseData);
                 }
             }
             DaoManager.commitTransaction();
@@ -140,33 +141,31 @@ public class QuestionnaireBean extends BasePageBean {
             return;
         }
 
-        response.setResponseDataList(getFieldValues().values().stream().filter(rd -> !rd.isEmpty()).collect(Collectors.toList()));
-
         getSocketBean().updateResponseTableByPushMessageInApplicationScope();
 
         RedirectHelper.sendRedirect(Page.RESPONSE_SUCCESS);
     }
 
     private void initResponseDataSingleSelectedOption(final ResponseData responseData) {
-        Object indexedEntitySelectItem = getSingleOptionsForResponseData()
+        Object indexedEntitySelectItem = getSingleOptionsForCorrespondingFields()
                 .getOrDefault(responseData.getField(), null);
         if (indexedEntitySelectItem != null) {
             responseData.setSelectedOptions(
-                    Collections.singletonList((Option) ((IndexedEntitySelectItem) indexedEntitySelectItem).getEntity()));
+                    Collections.singleton((Option) ((IndexedEntitySelectItem) indexedEntitySelectItem).getEntity()));
         }
     }
 
     private void initResponseDataMultipleSelectedOptionList(final ResponseData responseData) {
-        Object[] indexedEntitySelectItems = getMultipleOptionsForResponseData()
+        Object[] indexedEntitySelectItems = getMultipleOptionsForCorrespondingFields()
                 .getOrDefault(responseData.getField(), null);
         if (indexedEntitySelectItems != null && indexedEntitySelectItems.length != 0) {
             responseData.setSelectedOptions(Arrays.stream((indexedEntitySelectItems))
-                    .map(x -> (Option) ((IndexedEntitySelectItem) x).getEntity()).collect(Collectors.toList()));
+                    .map(x -> (Option) ((IndexedEntitySelectItem) x).getEntity()).collect(Collectors.toSet()));
         }
     }
 
-    private void initResponseDataDocument(final ResponseData responseData) throws IOException {
-        Document document = getFieldUploadedFiles().getOrDefault(responseData.getField(), null);
+    private void initResponseDataDocumentAndSaveFileToServer(final ResponseData responseData) throws IOException {
+        Document document = getUploadedFilesForCorrespondingFields().getOrDefault(responseData.getField(), null);
         if (document != null) {
             String path = FileHelper.saveFileOnServerAndGetPath(responseData.getField().getId() + "-" + document.getFileName(),
                     document.getContent(), String.valueOf(responseData.getResponse().getId()));
@@ -185,7 +184,7 @@ public class QuestionnaireBean extends BasePageBean {
         Document document = new Document();
         document.setContent(event.getFile().getContents());
         document.setFileName(event.getFile().getFileName());
-        getFieldUploadedFiles().put(field, document);
+        getUploadedFilesForCorrespondingFields().put(field, document);
     }
 
 }

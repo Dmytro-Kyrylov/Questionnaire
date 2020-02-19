@@ -11,7 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
-import java.util.List;
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @FacesConverter("IndexedEntityConverter")
 public class IndexedEntitySelectConverter<T extends IndexedEntity> implements Converter {
 
-    private List<IndexedEntitySelectItem<T>> entities;
+    private Collection<IndexedEntitySelectItem<T>> entities;
 
     private Class<T> entityClass;
 
@@ -36,7 +36,7 @@ public class IndexedEntitySelectConverter<T extends IndexedEntity> implements Co
         this(entityClass, null, functionForLabel);
     }
 
-    public IndexedEntitySelectConverter(Class<T> entityClass, List<T> entities, Function<T, String> functionForLabel) {
+    public IndexedEntitySelectConverter(Class<T> entityClass, Collection<T> entities, Function<T, String> functionForLabel) {
         if (entities != null) {
             this.entities = entities.stream()
                     .map(e -> new IndexedEntitySelectItem<T>(e, e.getId(), functionForLabel.apply(e)))

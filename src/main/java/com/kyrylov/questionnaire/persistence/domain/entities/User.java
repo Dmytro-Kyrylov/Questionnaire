@@ -11,8 +11,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -47,7 +47,7 @@ public class User extends IndexedEntity {
     private String activationKey;
 
     @OneToMany(mappedBy = "user")
-    private List<Response> responses = new LinkedList<>();
+    private List<Response> responses = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "app_user_role", joinColumns = {

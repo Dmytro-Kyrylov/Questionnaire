@@ -30,7 +30,7 @@ class BaseFileCreatorTest {
         field.setType(Field.FieldType.CHECKBOX);
         Option option = new Option();
         option.setText("test");
-        field.setOptions(Collections.singletonList(option));
+        field.setOptions(Collections.singleton(option));
 
         Response response = new Response();
         response.setDate(new Date());

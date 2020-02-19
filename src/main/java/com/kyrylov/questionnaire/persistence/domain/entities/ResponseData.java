@@ -21,9 +21,9 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
@@ -71,7 +71,7 @@ public class ResponseData implements IEntity {
     }, inverseJoinColumns = {
             @JoinColumn(name = "option_id", table = "option")
     })
-    private List<Option> selectedOptions = new ArrayList<>();
+    private Set<Option> selectedOptions = new HashSet<>();
 
     public void initResponseData(Field field, Response response) {
         setIdentifier(new ResponseDataIdentifier(field.getId(), response.getId()));

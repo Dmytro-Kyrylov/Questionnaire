@@ -10,7 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -30,6 +30,6 @@ public class UserRole extends IndexedEntity {
     private RoleEnum role;
 
     @ManyToMany(mappedBy = "roles")
-    private List<User> usersWithRole = new LinkedList<>();
+    private List<User> usersWithRole = new ArrayList<>();
 
 }

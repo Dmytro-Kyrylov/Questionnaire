@@ -11,7 +11,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 
 @Getter(AccessLevel.PRIVATE)
@@ -51,13 +50,13 @@ public class XlsFieldFileCreator extends XlsFileCreator {
             row.createCell(2).setCellValue(String.valueOf(field.getActive()));
             row.createCell(3).setCellValue(String.valueOf(field.getRequired()));
             if (field.getOptions().size() != 0) {
-                List<Option> options = field.getOptions();
-                for (int i = 0; i < options.size(); i++) {
-                    Option option = options.get(i);
-                    if (i != 0) {
+                boolean firstRow = true;
+                for (Option option : field.getOptions()) {
+                    if (!firstRow) {
                         row = sheet.createRow(rowNum++);
                     }
                     row.createCell(4).setCellValue(option.getText());
+                    firstRow = false;
                 }
             } else {
                 row.createCell(4).setCellValue(resource("fileXlsFieldNoOptions"));

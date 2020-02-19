@@ -9,8 +9,9 @@ import lombok.Setter;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import java.io.Serializable;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Allow to add conditions((restrictions) to query.
@@ -25,9 +26,10 @@ import java.util.Stack;
  * @param <L> result class type
  * @author Dmitrii
  */
+@SuppressWarnings("ConstantConditions")
 public class ConditionBuilder<T extends IEntity, L extends Serializable> extends QueryBuilder<T, L> {
 
-    private Stack<Tuple> predicates;
+    private Deque<Tuple> predicates;
 
     ConditionBuilder(QueryBuilder<T, L> queryBuilder) {
         super(queryBuilder);
@@ -35,7 +37,7 @@ public class ConditionBuilder<T extends IEntity, L extends Serializable> extends
     }
 
     private void initConditionBuilder() {
-        this.predicates = new Stack<>();
+        this.predicates = new ArrayDeque<>();
         openBracket();
     }
 
@@ -127,7 +129,7 @@ public class ConditionBuilder<T extends IEntity, L extends Serializable> extends
      */
     public ConditionBuilder<T, L> closeBracket() throws DatabaseException {
         Tuple predicateTuple = predicates.pop();
-        if (predicates.empty()) {
+        if (predicates.isEmpty()) {
             throw new DatabaseException("Closing not existing bracket");
         }
         createPredicate(predicateTuple.getPredicate());

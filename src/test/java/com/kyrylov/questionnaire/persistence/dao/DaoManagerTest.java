@@ -118,7 +118,7 @@ class DaoManagerTest extends JPAHibernateTest {
         field.setLabel("fieldTest");
         option.setText("optionTest");
         option.setField(field);
-        field.setOptions(Collections.singletonList(option));
+        field.setOptions(Collections.singleton(option));
 
         DaoManager.save(field, true);
         Assertions.assertNotNull(field.getId(), "field`s id is null");

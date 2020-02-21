@@ -3,15 +3,13 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/resources/templates/main_template.xhtml">
     <ui:define name="body">
         <p:outputPanel style="width: 100%; display: flex; justify-content: center">
             <p:outputPanel style="margin-top: 50px">
-                <h2 style="text-align: center">Thanks</h2>
-                <h3 style="text-align: center">Your response was saved</h3>
+                <h2 style="text-align: center">#{msg.responseSuccessHeader}</h2>
+                <h3 style="text-align: center">#{msg.responseSuccessMessage}</h3>
             </p:outputPanel>
         </p:outputPanel>
     </ui:define>

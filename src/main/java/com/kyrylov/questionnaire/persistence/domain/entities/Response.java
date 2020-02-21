@@ -12,8 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true, exclude = "responseDataList")
@@ -30,7 +30,7 @@ public class Response extends IndexedEntity {
     private User user;
 
     @Column(name = "create_date")
-    private Date date;
+    private Instant date;
 
     @OneToMany(mappedBy = "response", cascade = CascadeType.ALL)
     private List<ResponseData> responseDataList = new ArrayList<>();

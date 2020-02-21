@@ -13,6 +13,7 @@ public abstract class BaseSessionBean implements Serializable {
      * @since implementing Spring Security
      * @deprecated
      */
+    @Deprecated
     public void setSessionMaxInactiveInterval(int timeInSeconds) {
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
         httpSession.setMaxInactiveInterval(timeInSeconds);

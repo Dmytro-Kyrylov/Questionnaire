@@ -26,6 +26,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -90,7 +92,7 @@ public class QuestionnaireBean extends BasePageBean {
      */
     public void confirmResponse() {
         Response response = new Response();
-        response.setDate(new Date());
+        response.setDate(Instant.now());
 
         try {
             if (getUserBean().getUserId() != null) {
@@ -117,7 +119,8 @@ public class QuestionnaireBean extends BasePageBean {
                         initResponseDataSingleSelectedOption(responseData);
                         break;
                     case DATE:
-                        responseData.setDate(getDateForCorrespondingFields().getOrDefault(field, null));
+                        responseData.setDate(getDateForCorrespondingFields().getOrDefault(field, null)
+                                .toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                         break;
                     case FILE:
                         initResponseDataDocumentAndSaveFileToServer(responseData);

@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Locale;
 
 class BaseFileCreatorTest {
@@ -33,7 +33,7 @@ class BaseFileCreatorTest {
         field.setOptions(Collections.singleton(option));
 
         Response response = new Response();
-        response.setDate(new Date());
+        response.setDate(Instant.now());
         ResponseData responseData = new ResponseData();
         responseData.setSelectedOptions(field.getOptions());
         responseData.setField(field);

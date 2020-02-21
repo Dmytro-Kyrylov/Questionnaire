@@ -21,7 +21,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -57,7 +57,7 @@ public class ResponseData implements IEntity {
     private String bigText;
 
     @Column(name = "date_data")
-    private Date date;
+    private LocalDate date;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "document_id")

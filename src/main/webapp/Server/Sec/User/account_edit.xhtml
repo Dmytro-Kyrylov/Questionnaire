@@ -15,21 +15,21 @@
                 <p:panelGrid columns="3" styleClass="ui-panelgrid-blank form-group">
                     <h:outputText value="#{msg.accountEditUserFirstName}:"/>
                     <p:inputText value="#{accountEditBean.pageUser.firstName}" required="true" maxlength="255"/>
-                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    <p:message for="@previous"><p:autoUpdate/></p:message>
 
                     <h:outputText value="#{msg.accountEditUserLastName}:"/>
                     <p:inputText value="#{accountEditBean.pageUser.lastName}" required="true" maxlength="255"/>
-                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    <p:message for="@previous"><p:autoUpdate/></p:message>
 
                     <h:outputText value="#{msg.accountEditUserEmail}:"/>
                     <p:inputText value="#{accountEditBean.pageUser.email}" required="true" maxlength="255">
                         <f:validateRegex pattern="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"/>
                     </p:inputText>
-                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    <p:message for="@previous"><p:autoUpdate/></p:message>
 
                     <h:outputText value="#{msg.accountEditUserPhone}:"/>
                     <p:inputText value="#{accountEditBean.pageUser.phone}" maxlength="20"/>
-                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    <p:message for="@previous"><p:autoUpdate/></p:message>
 
                 </p:panelGrid>
                 <p:commandButton action="#{accountEditBean.editAccount}" value="#{msg.save}"

@@ -21,7 +21,7 @@ public final class EmailHelper {
      * @param subject subject of email
      * @param message email body
      */
-    public static void sendEmail(String email, String subject, String message) throws IOException, MessagingException {
+    public static synchronized void sendEmail(String email, String subject, String message) throws IOException, MessagingException {
         ResourceHelper.PropertiesWrapper properties = ResourceHelper.getProperties(ResourceHelper.ResourceProperties.EMAIL_PROPERTIES);
 
         String fromEmail = properties.getProperty(ResourceHelper.ResourceProperties.EmailProperties.SMTPS_USER);

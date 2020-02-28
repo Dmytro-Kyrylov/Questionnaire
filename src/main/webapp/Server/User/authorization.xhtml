@@ -20,13 +20,13 @@
                                  value="#{authorizationBean.pageUser.email}" styleClass="auto-width" maxlength="255">
                         <f:validateRegex pattern="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"/>
                     </p:inputText>
-                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    <p:message for="@previous"><p:autoUpdate/></p:message>
 
-                    <p:password placeholder="#{msg.authorizationLogInSectionPassword}" id="j_password" maxlength="20"
+                    <p:password placeholder="#{msg.authorizationLogInSectionPassword}" id="j_password" maxlength="30"
                                 value="#{authorizationBean.pageUser.password}" required="true" styleClass="auto-width">
                         <f:validateLength minimum="6"/>
                     </p:password>
-                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    <p:message for="@previous"><p:autoUpdate/></p:message>
 
                     <p:selectBooleanCheckbox id="remember-me" itemLabel="#{msg.authorizationRememberMeCheckBox}"/>
 
@@ -54,41 +54,41 @@
                                      maxlength="255">
                             <f:validateRegex pattern="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"/>
                         </p:inputText>
-                        <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                        <p:message for="@previous"><p:autoUpdate/></p:message>
                     </p:outputPanel>
 
                     <p:outputPanel>
                         <h:outputText value="*" styleClass="red"/>
                         <p:password placeholder="#{msg.authorizationSignUpSectionNewPassword}" styleClass="auto-width"
-                                    maxlength="20" feedback="true" value="#{authorizationBean.pageUser.password}"
+                                    maxlength="30" feedback="true" value="#{authorizationBean.pageUser.password}"
                                     match="confirmPass" required="true">
                             <f:validateLength minimum="6"/>
                         </p:password>
-                        <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                        <p:message for="@previous"><p:autoUpdate/></p:message>
                     </p:outputPanel>
 
                     <p:outputPanel>
                         <h:outputText value="*" styleClass="red"/>
                         <p:password id="confirmPass"
                                     placeholder="#{msg.authorizationSignUpSectionNewPasswordConfirmation}"
-                                    styleClass="auto-width" required="true" maxlength="20">
+                                    styleClass="auto-width" required="true" maxlength="30">
                             <f:validateLength minimum="6"/>
                         </p:password>
-                        <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                        <p:message for="@previous"><p:autoUpdate/></p:message>
                     </p:outputPanel>
 
                     <p:outputPanel>
                         <h:outputText value="*" styleClass="red"/>
                         <p:inputText placeholder="#{msg.authorizationSignUpSectionFirstName}" styleClass="auto-width"
                                      value="#{authorizationBean.pageUser.firstName}" required="true" maxlength="255"/>
-                        <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                        <p:message for="@previous"><p:autoUpdate/></p:message>
                     </p:outputPanel>
 
                     <p:outputPanel>
                         <h:outputText value="*" styleClass="red"/>
                         <p:inputText placeholder="#{msg.authorizationSignUpSectionLastName}" styleClass="auto-width"
                                      value="#{authorizationBean.pageUser.lastName}" required="true" maxlength="255"/>
-                        <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                        <p:message for="@previous"><p:autoUpdate/></p:message>
                     </p:outputPanel>
 
                     <p:inputText placeholder="#{msg.authorizationSignUpSectionPhone}" styleClass="auto-width"

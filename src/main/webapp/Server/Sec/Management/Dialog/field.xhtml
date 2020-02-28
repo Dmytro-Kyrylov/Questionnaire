@@ -19,7 +19,7 @@
                 <p:outputPanel>
                     <p:inputText placeholder="#{msg.fieldManageLabel}" value="#{fieldBean.field.label}"
                                  required="true" maxlength="255"/>
-                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    <p:message for="@previous"><p:autoUpdate/></p:message>
                 </p:outputPanel>
                 <p:selectOneMenu value="#{fieldBean.field.type}">
                     <p:ajax event="change" listener="#{fieldBean.onTypeOfFieldChangeListener}"
@@ -47,7 +47,7 @@
                     </p:dataTable>
                     <p:inputText type="hidden" required="true"
                                  disabled="#{not empty fieldBean.field.options}"/>
-                    <p:message for="@previous" display="icon"><p:autoUpdate/></p:message>
+                    <p:message for="@previous"><p:autoUpdate/></p:message>
                     <p:outputPanel styleClass="display-flex">
                         <p:inputText value="#{fieldBean.optionText}" maxlength="255" styleClass="auto-width"/>
                         <p:commandButton icon="fa fa-plus" action="#{fieldBean.addOptionToField}"

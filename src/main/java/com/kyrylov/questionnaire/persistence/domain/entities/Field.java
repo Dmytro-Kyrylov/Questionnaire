@@ -58,17 +58,21 @@ public class Field extends IndexedEntity {
     @OneToMany(mappedBy = "field", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ResponseData> responseDataList = new ArrayList<>();
 
+    /**
+     * Enum wrapper on type id DB column
+     * {@link Field#typeId}
+     */
     @Transient
     private FieldType type;
 
     @PreUpdate
     @PrePersist
-    private void setTypeIdByEnum() {
+    private void preSave() {
         setTypeId(getType() != null ? getType().getId() : null);
     }
 
     @PostLoad
-    private void setTypeEnumById() {
+    private void postLoad() {
         setType(FieldType.findTypeById(getTypeId()).orElse(null));
     }
 
@@ -98,7 +102,7 @@ public class Field extends IndexedEntity {
             return this.equals(FieldType.RADIO_BUTTON) || this.equals(FieldType.COMBOBOX);
         }
 
-        public static Optional<FieldType> findTypeById(Long id) {
+        private static Optional<FieldType> findTypeById(Long id) {
             return Arrays.stream(values()).filter(fieldType -> fieldType.getId().equals(id)).findFirst();
         }
     }

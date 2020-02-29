@@ -11,17 +11,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.io.IOException;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ToString(exclude = {"responses", "roles"})
+@ToString(of = {"email", "firstName", "lastName", "phone"})
 @javax.persistence.Entity
 @Table(name = "app_user")
 public class User extends IndexedEntity {
@@ -59,15 +56,5 @@ public class User extends IndexedEntity {
             @JoinColumn(name = "role_id", table = "user_role")
     })
     private Set<UserRole> roles = new HashSet<>();
-
-    public static void main(String[] args) throws IOException {
-        List<Object> objects = Collections.singletonList(null);
-        for (Object object : objects) {
-            System.out.println(object);
-        }
-        Instant star = Instant.now();
-
-    }
-
 
 }

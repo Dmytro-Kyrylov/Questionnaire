@@ -32,7 +32,7 @@ public class Response extends IndexedEntity {
     @Column(name = "create_date")
     private Instant date;
 
-    @OneToMany(mappedBy = "response", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "response", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ResponseData> responseDataList = new ArrayList<>();
 
 }

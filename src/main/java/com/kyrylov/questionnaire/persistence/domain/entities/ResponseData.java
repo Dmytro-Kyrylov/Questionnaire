@@ -4,7 +4,10 @@ import com.kyrylov.questionnaire.persistence.domain.interfaces.IEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.CascadeType;
@@ -19,6 +22,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -27,7 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Entity
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "response_data")
@@ -36,7 +41,8 @@ public class ResponseData implements IEntity {
     private static final long serialVersionUID = -4429962591671973629L;
 
     public ResponseData(Field field, Response response) {
-        initResponseData(field, response);
+        setField(field);
+        setResponse(response);
     }
 
     @EmbeddedId
@@ -59,7 +65,7 @@ public class ResponseData implements IEntity {
     @Column(name = "date_data")
     private LocalDate date;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "document_id")
     private Document document;
 
@@ -73,10 +79,10 @@ public class ResponseData implements IEntity {
     })
     private Set<Option> selectedOptions = new HashSet<>();
 
-    public void initResponseData(Field field, Response response) {
-        setIdentifier(new ResponseDataIdentifier(field.getId(), response.getId()));
-        setField(field);
-        setResponse(response);
+    @PrePersist
+    @PreUpdate
+    public void initResponseData() {
+        setIdentifier(new ResponseDataIdentifier(getField().getId(), getResponse().getId()));
     }
 
     public boolean isEmpty() {
@@ -106,7 +112,9 @@ public class ResponseData implements IEntity {
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
-    @Data
+    @EqualsAndHashCode
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
     @Embeddable
     static class ResponseDataIdentifier implements Serializable {
 

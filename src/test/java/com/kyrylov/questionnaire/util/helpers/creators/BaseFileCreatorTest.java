@@ -34,9 +34,8 @@ class BaseFileCreatorTest {
 
         Response response = new Response();
         response.setDate(Instant.now());
-        ResponseData responseData = new ResponseData();
+        ResponseData responseData = new ResponseData(field, response);
         responseData.setSelectedOptions(field.getOptions());
-        responseData.setField(field);
         response.setResponseDataList(Collections.singletonList(responseData));
 
         this.fields = Collections.singleton(field);

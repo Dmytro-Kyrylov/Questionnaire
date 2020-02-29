@@ -14,11 +14,11 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true, exclude = "responseDataList")
+@EqualsAndHashCode(callSuper = true, of = "text")
 @Data
 @javax.persistence.Entity
 @Table(name = "option")
-@ToString(exclude = "responseDataList")
+@ToString(of = "text")
 public class Option extends IndexedEntity {
 
     private static final long serialVersionUID = 7699421533554590043L;

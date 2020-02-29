@@ -20,8 +20,7 @@
 
                     <p:outputPanel rendered="#{field.type == enums.fieldTypeSINGLE_LINE_TEXT}">
                         <p:inputText value="#{questionnaireBean.textForCorrespondingFields[field]}"
-                                     required="#{field.required}" maxlength="255" styleClass="auto-width"
-                        />
+                                     required="#{field.required}" maxlength="255" styleClass="auto-width"/>
                         <p:message for="@previous"/>
                     </p:outputPanel>
 

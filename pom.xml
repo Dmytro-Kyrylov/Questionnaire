@@ -25,27 +25,27 @@
         <versions-maven-plugin.rulesUri>file://${user.dir}/maven-version-rules.xml</versions-maven-plugin.rulesUri>
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
 
-        <hibernate-core.version>5.4.10.Final</hibernate-core.version>
-        <hibernate-jpamodelgen.version>5.4.10.Final</hibernate-jpamodelgen.version>
+        <hibernate-core.version>5.4.12.Final</hibernate-core.version>
+        <hibernate-jpamodelgen.version>5.4.12.Final</hibernate-jpamodelgen.version>
 
         <hibernate-hikaricp.version>5.4.10.Final</hibernate-hikaricp.version>
         <HikariCP.version>3.4.2</HikariCP.version>
 
-        <hibernate-ehcache.version>5.4.10.Final</hibernate-ehcache.version>
+        <hibernate-jcache.version>5.4.12.Final</hibernate-jcache.version>
         <ehcache.version>3.8.1</ehcache.version>
 
-        <postgresql.version>42.2.9</postgresql.version>
+        <postgresql.version>42.2.10</postgresql.version>
 
         <primefaces.version>7.0</primefaces.version>
         <primefaces-theme.artifactId>excite-bike</primefaces-theme.artifactId>
         <primefaces-theme.version>1.0.10</primefaces-theme.version>
 
-        <lombok.version>1.18.10</lombok.version>
+        <lombok.version>1.18.12</lombok.version>
 
         <commons-lang3.version>3.9</commons-lang3.version>
 
-        <log4j-api.version>2.13.0</log4j-api.version>
-        <log4j-core.version>2.13.0</log4j-core.version>
+        <log4j-api.version>2.13.1</log4j-api.version>
+        <log4j-core.version>2.13.1</log4j-core.version>
         <slf4j-log4j12.version>1.7.30</slf4j-log4j12.version>
 
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
@@ -61,12 +61,12 @@
 
         <reflections.version>0.9.12</reflections.version>
 
-        <spring.version>5.2.1.RELEASE</spring.version>
+        <spring.version>5.2.2.RELEASE</spring.version>
 
-        <poi.version>4.1.1</poi.version>
-        <poi-ooxml.version>4.1.1</poi-ooxml.version>
+        <poi.version>4.1.2</poi.version>
+        <poi-ooxml.version>4.1.2</poi-ooxml.version>
 
-        <junit-jupiter-engine.version>5.5.2</junit-jupiter-engine.version>
+        <junit-jupiter-engine.version>5.6.0</junit-jupiter-engine.version>
         <h2.version>1.4.200</h2.version>
     </properties>
 
@@ -152,11 +152,11 @@
             <version>${hibernate-hikaricp.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-ehcache -->
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-jcache -->
         <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-ehcache</artifactId>
-            <version>${hibernate-ehcache.version}</version>
+            <artifactId>hibernate-jcache</artifactId>
+            <version>${hibernate-jcache.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->

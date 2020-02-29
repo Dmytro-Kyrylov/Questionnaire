@@ -1,16 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ehcache>
-    <diskStore path="/cache"/>
+<eh:config xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns:eh='http://www.ehcache.org/v3'
+        xmlns:jsr107='http://www.ehcache.org/v3/jsr107'
+        xsi:schemaLocation="
+        http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
+        http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+    <eh:service>
+        <jsr107:defaults enable-management="true" enable-statistics="false" default-template="default"/>
+    </eh:service>
 
-    <defaultCache
-            maxEntriesLocalHeap="100"
-            eternal="false"
-            statistics="true"
-            timeToIdleSeconds="10"
-            timeToLiveSeconds="120"
-            maxEntriesLocalDisk="1000"
-            diskExpiryThreadIntervalSeconds="120"
-            memoryStoreEvictionPolicy="LRU">
-        <persistence strategy="localTempSwap"/>
-    </defaultCache>
-</ehcache>
+    <eh:persistence directory="/cache"/>
+
+    <eh:cache alias="user_role">
+        <eh:expiry>
+            <eh:tti unit="days">1</eh:tti>
+        </eh:expiry>
+        <eh:resources>
+            <eh:heap unit="entries">20</eh:heap>
+        </eh:resources>
+    </eh:cache>
+
+    <eh:cache-template name="default">
+        <eh:expiry>
+            <eh:tti unit="seconds">120</eh:tti>
+        </eh:expiry>
+        <eh:resources>
+            <eh:heap unit="entries">1024</eh:heap>
+        </eh:resources>
+    </eh:cache-template>
+
+</eh:config>

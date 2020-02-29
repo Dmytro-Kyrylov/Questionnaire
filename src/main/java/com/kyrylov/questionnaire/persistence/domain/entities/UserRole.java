@@ -3,19 +3,14 @@ package com.kyrylov.questionnaire.persistence.domain.entities;
 import com.kyrylov.questionnaire.persistence.domain.IndexedEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "user_role")
 @Table(name = "user_role")
 public class UserRole extends IndexedEntity {
 
@@ -28,8 +23,5 @@ public class UserRole extends IndexedEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name", unique = true)
     private RoleEnum role;
-
-    @ManyToMany(mappedBy = "roles")
-    private List<User> usersWithRole = new ArrayList<>();
 
 }

@@ -28,6 +28,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -91,22 +92,23 @@ public class ResponseData implements IEntity {
                 && (getSelectedOptions() == null || getSelectedOptions().size() == 0);
     }
 
-    public String getDataAccordingTypeAsString() {
+    public Optional<String> getDataAccordingTypeAsString() {
         switch (this.getField().getType()) {
             case SINGLE_LINE_TEXT:
-                return this.getText();
+                return Optional.ofNullable(this.getText());
             case MULTILINE_TEXT:
-                return this.getBigText();
+                return Optional.ofNullable(this.getBigText());
             case RADIO_BUTTON:
             case CHECKBOX:
             case COMBOBOX:
-                return this.getSelectedOptions().stream().map(Option::getText).collect(Collectors.joining(";"));
+                return Optional.of(this.getSelectedOptions().stream().map(Option::getText)
+                        .collect(Collectors.joining(";"))).filter(x->!x.isEmpty());
             case DATE:
-                return this.getDate().toString();
+                return Optional.ofNullable(this.getDate()).map(LocalDate::toString);
             case FILE:
-                return this.getDocument().getFileName();
+                return Optional.ofNullable(this.getDocument()).map(Document::getFileName);
             default:
-                return "";
+                return Optional.empty();
         }
     }
 

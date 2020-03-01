@@ -8,8 +8,6 @@
         <jsr107:defaults enable-management="true" enable-statistics="false" default-template="default"/>
     </eh:service>
 
-    <eh:persistence directory="/cache"/>
-
     <eh:cache alias="user_role">
         <eh:expiry>
             <eh:tti unit="days">1</eh:tti>

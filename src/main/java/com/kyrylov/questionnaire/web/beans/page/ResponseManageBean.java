@@ -54,13 +54,9 @@ public class ResponseManageBean extends BaseLazyEntityModelBean<Response> {
     }
 
     public String getResponseValueForField(Response response, Field field) {
-        ResponseData responseData = response.getResponseDataList().stream()
-                .filter(rd -> rd.getField().equals(field)).findFirst().orElse(null);
-        if (responseData != null) {
-            return responseData.getDataAccordingTypeAsString();
-        } else {
-            return getMessageResourceWithUserLocale("responseManageBeanEmptyDataForField");
-        }
+        return response.getResponseDataList().stream().filter(rd -> rd.getField().equals(field)).findFirst()
+                .flatMap(ResponseData::getDataAccordingTypeAsString)
+                .orElse(getMessageResourceWithUserLocale("responseManageBeanEmptyDataForField"));
     }
 
     /**

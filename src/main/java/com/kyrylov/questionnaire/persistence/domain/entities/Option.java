@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -30,6 +31,6 @@ public class Option extends IndexedEntity {
     @JoinColumn(name = "field_id")
     private Field field;
 
-    @ManyToMany(mappedBy = "selectedOptions", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "selectedOptions", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ResponseData> responseDataList = new ArrayList<>();
 }

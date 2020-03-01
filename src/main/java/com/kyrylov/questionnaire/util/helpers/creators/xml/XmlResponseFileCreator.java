@@ -13,6 +13,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Optional;
 
 @Getter(AccessLevel.PRIVATE)
 public class XmlResponseFileCreator extends XmlFileCreator {
@@ -42,28 +43,31 @@ public class XmlResponseFileCreator extends XmlFileCreator {
             responseNode.setAttribute(resource("fileXmlResponseCreateDate"), response.getDate().toString());
 
             for (ResponseData responseData : response.getResponseDataList()) {
-                Field field = responseData.getField();
-                Element fieldNode = document.createElement(resource("fileXmlResponseFieldNode"));
+                Optional<String> dataAccordingTypeAsString = responseData.getDataAccordingTypeAsString();
+                if (dataAccordingTypeAsString.isPresent()) {
+                    Field field = responseData.getField();
+                    Element fieldNode = document.createElement(resource("fileXmlResponseFieldNode"));
 
-                fieldNode.setAttribute(resource("fileXmlResponseFieldLabel"), field.getLabel());
+                    fieldNode.setAttribute(resource("fileXmlResponseFieldLabel"), field.getLabel());
 
-                Element fieldTypeNode = document.createElement(field.getType().name().toLowerCase());
+                    Element fieldTypeNode = document.createElement(field.getType().name().toLowerCase());
 
-                if (field.getType().isMultiOptionsType()) {
-                    Element optionRoot = document.createElement(resource("fileXmlResponseOptionRoot"));
+                    if (field.getType().isMultiOptionsType()) {
+                        Element optionRoot = document.createElement(resource("fileXmlResponseOptionRoot"));
 
-                    for (Option option : responseData.getSelectedOptions()) {
-                        Element optionNode = document.createElement(resource("fileXmlResponseOptionNode"));
-                        optionNode.appendChild(document.createTextNode(option.getText()));
-                        optionRoot.appendChild(optionNode);
+                        for (Option option : responseData.getSelectedOptions()) {
+                            Element optionNode = document.createElement(resource("fileXmlResponseOptionNode"));
+                            optionNode.appendChild(document.createTextNode(option.getText()));
+                            optionRoot.appendChild(optionNode);
+                        }
+                        fieldTypeNode.appendChild(optionRoot);
+                    } else {
+                        fieldTypeNode.appendChild(document.createTextNode(dataAccordingTypeAsString.get()));
                     }
-                    fieldTypeNode.appendChild(optionRoot);
-                } else {
-                    fieldTypeNode.appendChild(document.createTextNode(responseData.getDataAccordingTypeAsString()));
-                }
 
-                fieldNode.appendChild(fieldTypeNode);
-                responseNode.appendChild(fieldNode);
+                    fieldNode.appendChild(fieldTypeNode);
+                    responseNode.appendChild(fieldNode);
+                }
             }
             root.appendChild(responseNode);
         }

@@ -49,7 +49,7 @@ public class XlsFieldFileCreator extends XlsFileCreator {
             row.createCell(1).setCellValue(field.getType().name());
             row.createCell(2).setCellValue(String.valueOf(field.getActive()));
             row.createCell(3).setCellValue(String.valueOf(field.getRequired()));
-            if (field.getOptions().size() != 0) {
+            if (field.getType().isOptionsType()) {
                 boolean firstRow = true;
                 for (Option option : field.getOptions()) {
                     if (!firstRow) {

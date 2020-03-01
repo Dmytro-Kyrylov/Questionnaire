@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -63,22 +64,21 @@ public class XlsResponseFileCreator extends XlsFileCreator {
 
             List<ResponseData> responseDataList = response.getResponseDataList();
             for (Field field : getFields()) {
-                ResponseData responseData = responseDataList.stream().filter(rd -> rd.getField().equals(field))
-                        .findAny().orElse(null);
-                if (responseData != null) {
-                    if (field.getType().isMultiOptionsType()) {
-                        int lastOptionRow = addOptionColumnAndGetLastRow(sheet, rowNum, cellNum, row, responseData);
+                Optional<ResponseData> responseData = responseDataList.stream()
+                        .filter(rd -> rd.getField().equals(field)).findAny();
+                if (field.getType().isMultiOptionsType()
+                        && responseData.filter(x->!x.getSelectedOptions().isEmpty()).isPresent()) {
+                    int lastOptionRow = addOptionColumnAndGetLastRow(sheet, rowNum, cellNum, row,
+                            responseData.map(ResponseData::getSelectedOptions).get());
 
-                        if (nextEmptyRow < lastOptionRow + 1) {
-                            nextEmptyRow = lastOptionRow + 1;
-                        }
-                        cellNum++;
-                    } else {
-                        String data = responseData.getDataAccordingTypeAsString();
-                        row.createCell(cellNum++).setCellValue(data != null ? data : resource("fileXlsResponseNoAnswer"));
+                    if (nextEmptyRow < lastOptionRow + 1) {
+                        nextEmptyRow = lastOptionRow + 1;
                     }
-                } else {
-                    row.createCell(cellNum++).setCellValue(resource("fileXlsResponseNoAnswer"));
+                    cellNum++;
+                }else{
+                    row.createCell(cellNum++).setCellValue(responseData
+                            .flatMap(ResponseData::getDataAccordingTypeAsString)
+                            .orElse(resource("fileXlsResponseNoAnswer")));
                 }
             }
             rowNum = nextEmptyRow;
@@ -92,8 +92,7 @@ public class XlsResponseFileCreator extends XlsFileCreator {
         return getBytes(workbook);
     }
 
-    private int addOptionColumnAndGetLastRow(Sheet sheet, int rowNum, int cellNum, Row row, ResponseData responseData) {
-        Set<Option> selectedOptions = responseData.getSelectedOptions();
+    private int addOptionColumnAndGetLastRow(Sheet sheet, int rowNum, int cellNum, Row row, Set<Option> selectedOptions) {
         Row rowForOption = row;
         int rowNumForOption = rowNum;
         boolean firstRow = true;

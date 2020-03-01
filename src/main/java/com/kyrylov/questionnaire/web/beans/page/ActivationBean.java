@@ -10,9 +10,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import javax.mail.MessagingException;
+import java.io.IOException;
 
 @Getter
 @Setter
@@ -23,14 +24,7 @@ public class ActivationBean extends BasePageBean {
 
     private static final long serialVersionUID = 3866658217772782351L;
 
-    private String activationMessage;
-
-    @PostConstruct
-    private void init() {
-        this.activationMessage = activateAccount();
-    }
-
-    private String activateAccount() {
+    public String activateAccount() {
         String key = getRequestParameter(RedirectHelper.Parameter.ACTIVATION_KEY_PARAMETER);
         if (key != null && !key.isEmpty()) {
             try {
@@ -48,6 +42,22 @@ public class ActivationBean extends BasePageBean {
             }
         }
         return getMessageResourceWithUserLocale("activationBeanIncorrectActivationKey");
+    }
+
+    /**
+     * Send activation link to user`s mail.
+     */
+    public void sendNewActivationEmail() {
+        try {
+            String activationUrl = UserActivationHelper.createActivationUrl(getUserBean().getUser().getActivationKey());
+            UserActivationHelper.sendActivationEmail(activationUrl,
+                    getUserBean().getUser().getEmail(), getUserBean().getUserLocale());
+        } catch (IOException | MessagingException e) {
+            log.error(e.getMessage(), e);
+            displayErrorMessageWithUserLocale("sendActivationEmailError");
+            return;
+        }
+        displaySuccessMessageWithUserLocale("sendActivationEmailSuccess");
     }
 
 }

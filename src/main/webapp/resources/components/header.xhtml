@@ -6,7 +6,7 @@
         <p:menuitem url="#{facesContext.externalContext.requestContextPath}/questionnaire.xhtml" value="#{msg.pageNameQuestionnaire}"/>
         <c:if test="#{userBean.user != null}">
             <p:submenu rendered="#{!userBean.user.active}" label="#{msg.headerMenuActivationMessage}" styleClass="submenu-label-red">
-                <p:menuitem value="#{msg.headerMenuActivationSendNewEmail}" action="#{userBean.sendNewActivationEmail}" update="messages"/>
+                <p:menuitem value="#{msg.headerMenuActivationSendNewEmail}" action="#{activationBean.sendNewActivationEmail}" update="messages"/>
             </p:submenu>
 
             <p:menuitem rendered="#{userBean.user.active}" url="#{facesContext.externalContext.requestContextPath}/Server/Sec/Management/fields.xhtml"

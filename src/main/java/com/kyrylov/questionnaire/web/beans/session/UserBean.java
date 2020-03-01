@@ -2,8 +2,6 @@ package com.kyrylov.questionnaire.web.beans.session;
 
 import com.kyrylov.questionnaire.util.TypeOfLocale;
 import com.kyrylov.questionnaire.util.dto.UserDto;
-import com.kyrylov.questionnaire.util.helpers.ResourceHelper;
-import com.kyrylov.questionnaire.util.helpers.UserActivationHelper;
 import com.kyrylov.questionnaire.web.beans.BaseSessionBean;
 import com.kyrylov.questionnaire.web.security.SecurityHelper;
 import lombok.Getter;
@@ -12,10 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,29 +76,6 @@ public class UserBean extends BaseSessionBean {
 
     public boolean equalWithCurrentLocale(String typeOfLocale) {
         return getUserLocale().getLanguage().equals(TypeOfLocale.getByCode(typeOfLocale).getLanguage());
-    }
-
-    /**
-     * Send activation link to user`s mail.
-     * <p>
-     * I do not want to implement the correct logic for this, because it is not necessary.
-     */
-    public void sendNewActivationEmail() {
-        try {
-            String activationUrl = UserActivationHelper.createActivationUrl(getUser().getActivationKey());
-            UserActivationHelper.sendActivationEmail(activationUrl, getUser().getEmail(), getUserLocale());
-        } catch (IOException | MessagingException e) {
-            log.error(e.getMessage(), e);
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            ResourceHelper.getMessageResource("sendActivationEmailError", getUserLocale())
-                            , ""));
-            return;
-        }
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_INFO,
-                        ResourceHelper.getMessageResource("sendActivationEmailSuccess", getUserLocale())
-                        , ""));
     }
 
 }

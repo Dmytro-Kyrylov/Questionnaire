@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Allow to add conditions((restrictions) to query.
@@ -208,7 +209,7 @@ public class ConditionBuilder<T extends IEntity, L extends Serializable> extends
     }
 
     @Override
-    public L singleResult() throws DatabaseException {
+    public Optional<L> singleResult() throws DatabaseException {
         this.setPredicate(getResultPredicate());
         return super.singleResult();
     }

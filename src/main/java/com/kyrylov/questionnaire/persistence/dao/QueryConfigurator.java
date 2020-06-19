@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -44,7 +45,7 @@ public final class QueryConfigurator<T extends IEntity, L extends Serializable> 
     }
 
     @Override
-    public L singleResult() throws DatabaseException {
+    public Optional<L> singleResult() throws DatabaseException {
         setLimit(1);
         return DaoManager.getSingleResult(this);
     }

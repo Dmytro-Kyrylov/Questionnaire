@@ -128,7 +128,7 @@ public class EntityLazyListModel<T extends IndexedEntity> extends LazyDataModel<
             QueryConfigurator<T, Long> queryConfiguratorForCount =
                     (QueryConfigurator<T, Long>) getPreparedQuery(joinBuilderForCount, null, null, filters);
 
-            this.setRowCount(queryConfiguratorForCount.singleResult().intValue());
+            this.setRowCount(queryConfiguratorForCount.singleResult().map(Long::intValue).orElse(0));
         } catch (Exception e) {
             log.error("", e);
         }
@@ -254,8 +254,8 @@ public class EntityLazyListModel<T extends IndexedEntity> extends LazyDataModel<
             try {
                 JoinBuilder<T, Long> builder = DaoManager.getCount(getEntityClass());
                 ConditionBuilder<T, ?> conditionBuilder = getJoinsFunc().apply(builder).where();
-                Long count = (Long) getRestrictionsFunc().apply(conditionBuilder).singleResult();
-                this.totalNumRows = count.intValue();
+                this.totalNumRows = getRestrictionsFunc().apply(conditionBuilder).singleResult()
+                        .map(x -> ((Long) x).intValue()).orElse(0);
             } catch (Exception e) {
                 log.error("", e);
             }

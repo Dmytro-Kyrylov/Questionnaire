@@ -17,6 +17,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Optional;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
@@ -30,9 +31,10 @@ public final class UserActivationHelper {
      * @throws DatabaseException if any exception occurs
      */
     public static User activateAccount(String key) throws DatabaseException {
-        User user = DaoManager.getByField(User.class, User_.ACTIVATION_KEY, key);
+        Optional<User> optionalUser = DaoManager.getByField(User.class, User_.ACTIVATION_KEY, key);
 
-        if (user != null) {
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
             user.setActivationKey(null);
             user.setActive(true);
             user.getRoles().add(UserHelper.getRoleByEnum(UserRole.RoleEnum.ROLE_ADMIN));

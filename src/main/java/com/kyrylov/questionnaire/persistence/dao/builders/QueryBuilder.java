@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -103,7 +104,7 @@ public abstract class QueryBuilder<T extends IEntity, L extends Serializable> {
      * @return single result
      * @throws DatabaseException if any exception occurs
      */
-    public L singleResult() throws DatabaseException {
+    public Optional<L> singleResult() throws DatabaseException {
         return new QueryConfigurator<>(this).singleResult();
     }
 

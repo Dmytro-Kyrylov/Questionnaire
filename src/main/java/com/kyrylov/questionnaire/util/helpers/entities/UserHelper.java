@@ -9,6 +9,8 @@ import com.kyrylov.questionnaire.persistence.util.DatabaseException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.Optional;
+
 /**
  * Contains business methods to work with User entity
  * {@link User}
@@ -27,7 +29,7 @@ public final class UserHelper {
      */
     public static boolean isUserEmailAlreadyExistInDB(String email) throws DatabaseException {
         long usersWithEnteredEmail = DaoManager.getCount(User.class).where()
-                .equal(User_.EMAIL, email).singleResult();
+                .equal(User_.EMAIL, email).singleResult().orElse(0L);
         return usersWithEnteredEmail != 0;
     }
 
@@ -40,14 +42,16 @@ public final class UserHelper {
      */
     public static UserRole getRoleByEnum(UserRole.RoleEnum roleEnum) throws DatabaseException {
         try {
-            UserRole userRole = DaoManager.getByField(UserRole.class, UserRole_.ROLE, roleEnum);
+            Optional<UserRole> optionalUserRole = DaoManager.getByField(UserRole.class, UserRole_.ROLE, roleEnum);
 
-            if (userRole == null) {
-                userRole = new UserRole();
+            if (!optionalUserRole.isPresent()) {
+                UserRole userRole = new UserRole();
                 userRole.setRole(roleEnum);
                 DaoManager.save(userRole, !DaoManager.isTransactionInProgress());
+                return userRole;
+            } else {
+                return optionalUserRole.get();
             }
-            return userRole;
         } catch (DatabaseException e) {
             throw new DatabaseException("Cannot get role", e);
         }

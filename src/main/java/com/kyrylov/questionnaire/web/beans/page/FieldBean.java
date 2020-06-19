@@ -19,6 +19,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Setter
 @Getter
@@ -44,16 +45,20 @@ public class FieldBean extends BasePageBean {
         String fieldId = getHttpServletRequest().getParameter(RedirectHelper.Parameter.ID_OF_ENTITY.getParameter());
         if (fieldId != null) {
             try {
-                this.field = DaoManager.select(Field.class).leftJoin(Field_.OPTIONS, "o", true)
+                Optional<Field> optionalField = DaoManager.select(Field.class)
+                        .leftJoin(Field_.OPTIONS, "o", true)
                         .where().equal(Field_.ID, Long.parseLong(fieldId)).singleResult();
+
+                if (optionalField.isPresent()) {
+                    this.field = optionalField.get();
+                } else {
+                    displayErrorMessageWithUserLocale("fieldBeanErrorFieldWithCurrentIdIsNotExist");
+                    ajaxUpdate("messages");
+                    return;
+                }
             } catch (DatabaseException e) {
                 log.error("Error when trying to get field entity", e);
                 displayErrorMessageWithUserLocale("fieldBeanErrorOnPageInit");
-                ajaxUpdate("messages");
-                return;
-            }
-            if (this.field == null) {
-                displayErrorMessageWithUserLocale("fieldBeanErrorFieldWithCurrentIdIsNotExist");
                 ajaxUpdate("messages");
                 return;
             }

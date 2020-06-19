@@ -22,8 +22,11 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
 /**
  * Main class to work with database
@@ -41,7 +44,7 @@ public final class DaoManager {
         SAVE, DELETE
     }
 
-    private static final SessionManager SESSION_MANAGER = HibernateUtil.getSessionManager();
+  //  private static final SessionManager SESSION_MANAGER = HibernateUtil.getSessionManager();
 
     /**
      * Return session from SessionManager {@link SessionManager}
@@ -49,7 +52,7 @@ public final class DaoManager {
      * @return hibernate session
      */
     public static Session getSession() {
-        return SESSION_MANAGER.getSessionHolder().getSession();
+        return null;
     }
 
     /**
@@ -87,7 +90,8 @@ public final class DaoManager {
      * @return entity with the passed field value or null if no such entity in database
      * @throws DatabaseException if an any exceptions occurs
      */
-    public static <T extends IEntity> T getByField(Class<T> tClass, String field, Object value) throws DatabaseException {
+    public static <T extends IEntity> Optional<T> getByField(Class<T> tClass, String field, Object value)
+            throws DatabaseException {
         try {
             Session session = getSession();
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -99,7 +103,7 @@ public final class DaoManager {
 
             Query<T> query = session.createQuery(criteria).setMaxResults(1);
 
-            return query.getResultList().stream().findFirst().orElse(null);
+            return query.getResultList().stream().findFirst();
         } catch (Exception e) {
             throw new DatabaseException("Error when trying to get entity from database", e);
         }
@@ -231,8 +235,8 @@ public final class DaoManager {
      * @return single result or null
      * @throws DatabaseException if an any exceptions occurs
      */
-    static <T extends IEntity, L extends Serializable> L getSingleResult(QueryConfigurator<T, L> queryConfigurator) throws DatabaseException {
-        return getList(queryConfigurator).stream().findFirst().orElse(null);
+    static <T extends IEntity, L extends Serializable> Optional<L> getSingleResult(QueryConfigurator<T, L> queryConfigurator) throws DatabaseException {
+        return getList(queryConfigurator).stream().findFirst();
     }
 
     public static <T extends IEntity> void save(T entity)

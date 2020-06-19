@@ -8,21 +8,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.Optional;
+
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user;
+        Optional<User> optionalUser;
         try {
-            user = DaoManager.getByField(User.class, User_.EMAIL, email);
+            optionalUser = DaoManager.getByField(User.class, User_.EMAIL, email);
         } catch (DatabaseException e) {
             throw new UsernameNotFoundException("Error when trying to load user", e);
         }
-        if (user == null) {
-            throw new UsernameNotFoundException("User was not found");
-        }
 
-        return new UserDetailsImpl(user);
+        return new UserDetailsImpl(optionalUser.orElseThrow(() -> new UsernameNotFoundException("User was not found")));
     }
 
 }

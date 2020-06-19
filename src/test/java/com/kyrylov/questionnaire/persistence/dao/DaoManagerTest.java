@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 class DaoManagerTest extends JPAHibernateTest {
@@ -39,11 +40,12 @@ class DaoManagerTest extends JPAHibernateTest {
 
         DaoManager.getSession().evict(user);
         Assertions.assertFalse(DaoManager.getSession().contains(user), "User still in session");
-        User userByField = DaoManager.getByField(User.class, User_.EMAIL, user.getEmail());
-        Assertions.assertNotNull(userByField, "User was not found");
-        Assertions.assertEquals(user.getEmail(), userByField.getEmail(), "Users are different");
+        Optional<User> userByField = DaoManager.getByField(User.class, User_.EMAIL, user.getEmail());
+        Assertions.assertTrue(userByField.isPresent(), "User was not found");
+        Assertions.assertEquals(user.getEmail(), userByField.get().getEmail(), "Users are different");
 
-        Assertions.assertNull(DaoManager.getByField(User.class, User_.EMAIL, "empty"), "User was found? WTF?");
+        Assertions.assertFalse(DaoManager.getByField(User.class, User_.EMAIL, "empty").isPresent(),
+                "User was found? WTF?");
     }
 
     @Test
@@ -56,11 +58,11 @@ class DaoManagerTest extends JPAHibernateTest {
     void dtoSelect() throws DatabaseException {
         User user = createUserWithEmail("dtoSelect");
 
-        UserDto userDto = DaoManager.select(User.class, UserDto.class)
+        Optional<UserDto> userDto = DaoManager.select(User.class, UserDto.class)
                 .where().equal(User_.EMAIL, user.getEmail()).readonly().singleResult();
 
-        Assertions.assertNotNull(userDto, "Dto was not created");
-        Assertions.assertEquals(user.getEmail(), userDto.getEmail(), "Emails are different");
+        Assertions.assertTrue(userDto.isPresent(), "Dto was not created");
+        Assertions.assertEquals(user.getEmail(), userDto.get().getEmail(), "Emails are different");
     }
 
     @Test
@@ -70,8 +72,9 @@ class DaoManagerTest extends JPAHibernateTest {
         DaoManager.getSession().evict(user);
         Assertions.assertFalse(DaoManager.getSession().contains(user), "User still in session");
 
-        User user1 = DaoManager.select(User.class).readonly().singleResult();
-        Assertions.assertNotNull(user1, "User was not found");
+        Optional<User> user1Optional = DaoManager.select(User.class).readonly().singleResult();
+        Assertions.assertTrue(user1Optional.isPresent(), "User was not found");
+        User user1 = user1Optional.get();
 
         user1.setEmail("test2");
         DaoManager.save(user1, true);
@@ -96,17 +99,17 @@ class DaoManagerTest extends JPAHibernateTest {
 
     @Test
     void getCount() throws DatabaseException {
-        Long count1 = DaoManager.getCount(Field.class).singleResult();
-        Assertions.assertNotNull(count1, "Count is empty");
+        Optional<Long> count1 = DaoManager.getCount(Field.class).singleResult();
+        Assertions.assertTrue(count1.isPresent(), "Count is empty");
 
         Field field = new Field();
         field.setLabel("fieldTest1");
         DaoManager.save(field, true);
         Assertions.assertNotNull(field.getId(), "Field was not saved");
 
-        Long count2 = DaoManager.getCount(Field.class).singleResult();
-        Assertions.assertNotNull(count1, "Count is empty");
-        Assertions.assertEquals(count1 + 1, count2, "Wrong count of fields after saving");
+        Optional<Long> count2 = DaoManager.getCount(Field.class).singleResult();
+        Assertions.assertTrue(count2.isPresent(), "Count is empty");
+        Assertions.assertEquals(count1.get() + 1, count2.get(), "Wrong count of fields after saving");
     }
 
     @Test

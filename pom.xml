@@ -61,7 +61,7 @@
 
         <reflections.version>0.9.12</reflections.version>
 
-        <spring.version>5.2.2.RELEASE</spring.version>
+        <spring.version>5.2.10.RELEASE</spring.version>
 
         <poi.version>4.1.2</poi.version>
         <poi-ooxml.version>4.1.2</poi-ooxml.version>

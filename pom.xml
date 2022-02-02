@@ -34,7 +34,7 @@
         <hibernate-jcache.version>5.4.12.Final</hibernate-jcache.version>
         <ehcache.version>3.8.1</ehcache.version>
 
-        <postgresql.version>42.2.10</postgresql.version>
+        <postgresql.version>42.2.25</postgresql.version>
 
         <primefaces.version>7.0</primefaces.version>
         <primefaces-theme.artifactId>excite-bike</primefaces-theme.artifactId>

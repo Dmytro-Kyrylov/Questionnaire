@@ -25,7 +25,7 @@
         <versions-maven-plugin.rulesUri>file://${user.dir}/maven-version-rules.xml</versions-maven-plugin.rulesUri>
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
 
-        <hibernate-core.version>5.4.12.Final</hibernate-core.version>
+        <hibernate-core.version>5.4.24.Final</hibernate-core.version>
         <hibernate-jpamodelgen.version>5.4.12.Final</hibernate-jpamodelgen.version>
 
         <hibernate-hikaricp.version>5.4.10.Final</hibernate-hikaricp.version>
